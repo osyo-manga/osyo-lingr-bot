@@ -37,7 +37,7 @@ post '/mtg' do
 			return MTG.image(text[/^#MTG\s*(.+)/, 1]).join("\n")
 		end
 	}
-	return "Not Found."
+	return ""
 end
 
 
