@@ -64,7 +64,7 @@ post '/mobamasu' do
 	json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
 		if /^#mobamasu/ =~ text
-			result mobamasu_image_rand(text[/^#MTG\s*(.+)/, 1])
+			result = mobamasu_image_rand(text[/^#MTG\s*(.+)/, 1])
 			if result.empty?
 				return "Not found."
 			else
