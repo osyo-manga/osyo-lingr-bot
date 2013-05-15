@@ -34,7 +34,12 @@ post '/mtg' do
 	json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
 		if /^#MTG/ =~ text
-			return MTG.image(text[/^#MTG\s*(.+)/, 1]).join("\n")
+			result = MTG.image(text[/^#MTG\s*(.+)/, 1]).join("\n")
+			if result.empty?
+				return "Not found."
+			else
+				return result
+			end
 		end
 	}
 	return ""
