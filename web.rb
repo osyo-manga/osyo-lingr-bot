@@ -25,7 +25,7 @@ end
 
 
 get '/mtg/:name' do
-	"Hello #{params[:name]}!"
+	return MTG.image(params[:name]).map {|image| "<img src=#{image} />" }
 end
 
 post '/mtg' do
@@ -34,7 +34,7 @@ post '/mtg' do
 	json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
 		if /^#MTG/ =~ text
-			return MTG.imge(text[/^#MTG\s*(.+)/, 1]).join("\n")
+			return MTG.image(text[/^#MTG\s*(.+)/, 1]).join("\n")
 		end
 	}
 	""
