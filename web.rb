@@ -30,14 +30,15 @@ end
 
 post '/mtg' do
 	content_type :text
+	result = ""
 	json = JSON.parse(request.body.string)
 	json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
 		if /^#MTG/ =~ text
-			return MTG.image(text[/^#MTG\s*(.+)/, 1]).join("\n")
+			result += MTG.image(text[/^#MTG\s*(.+)/, 1]).join("\n") + "\n"
 		end
 	}
-	""
+	return result
 end
 
 
