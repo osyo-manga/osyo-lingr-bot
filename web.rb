@@ -55,6 +55,9 @@ def mobamasu_image_rand(name)
 	agent = Mechanize.new
 	agent.get(url)
 	result = agent.page.links_with(:href => /Fidolmaster/)
+	if result.empty?
+		return ""
+	end
 	result[rand(result.length)].href
 end
 
