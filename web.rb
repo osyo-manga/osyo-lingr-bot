@@ -15,9 +15,17 @@ module MTG
 	module_function:image
 end
 
+get '/' do
+	"Hello, world"
+end
 
 get '/mtg' do
-	"hoge"
+	"MTG"
+end
+
+
+get '/mtg/:name' do
+	"Hello #{params[:name]}!"
 end
 
 post '/mtg' do
