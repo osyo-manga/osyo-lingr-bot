@@ -9,7 +9,7 @@ module MTG
 	def image(name)
 		agent = Mechanize.new
 		agent.get("http://magiccards.info/query?q=#{name}")
-		agent.page.images_with(:src => /scans\/jp\/pvc/)
+		agent.page.images_with(:src => /scans\/jp/)
 	end
 
 	module_function:image
