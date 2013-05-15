@@ -5,6 +5,7 @@ require 'json'
 require "mechanize"
 
 
+# -------------------- MTG --------------------
 module MTG
 	def image(name)
 		agent = Mechanize.new
@@ -35,6 +36,35 @@ post '/mtg' do
 		text = e["message"]["text"]
 		if /^#MTG/ =~ text
 			result = MTG.image(text[/^#MTG\s*(.+)/, 1]).join("\n")
+			if result.empty?
+				return "Not found."
+			else
+				return result
+			end
+		end
+	}
+	return ""
+end
+
+
+
+
+# -------------------- mobamasu --------------------
+def mobamasu_image_rand(name)
+	url = "http://mobile-trade.jp/fun/idolmaster/card.php?_name=#{name}"
+	agent = Mechanize.new
+	agent.get(url)
+	result = agent.page.links_with(:href => /Fidolmaster/)
+	result[rand(result.length)].href
+end
+
+post '/mobamasu' do
+	content_type :text
+	json = JSON.parse(request.body.string)
+	json["events"].select {|e| e['message'] }.map {|e|
+		text = e["message"]["text"]
+		if /^#mobamasu/ =~ text
+			result mobamasu_image_rand(text[/^#MTG\s*(.+)/, 1])
 			if result.empty?
 				return "Not found."
 			else
