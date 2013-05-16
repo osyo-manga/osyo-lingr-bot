@@ -97,7 +97,11 @@ module KWSM
 	module_function:image_rand
 end
 
-puts 
+
+get '/kwsm' do
+	"<img src=\"#{KWSM.image_rand.node}\">"
+end
+
 
 post '/kwsm' do
 	content_type :text
