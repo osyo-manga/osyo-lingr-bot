@@ -109,7 +109,7 @@ post '/kwsm' do
 	json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
 		if /^#kwsm/ =~ text
-			return KWSM.image_rand
+			return "わかるわ\n" + KWSM.image_rand
 		end
 	}
 	return ""
