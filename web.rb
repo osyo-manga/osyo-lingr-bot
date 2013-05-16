@@ -1,6 +1,5 @@
 # -*- encoding: UTF-8 -*-
 # https://github.com/raa0121/raa0121-lingrbot/blob/master/dice.rb
-require 'rubygems'
 require 'sinatra'
 require 'json'
 require "mechanize"
