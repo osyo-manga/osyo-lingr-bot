@@ -47,8 +47,6 @@ post '/mtg' do
 end
 
 
-
-
 # -------------------- mobamasu --------------------
 def mobamasu_image_rand(name)
 	url = "http://mobile-trade.jp/fun/idolmaster/card.php?_name=#{name}"
@@ -73,6 +71,41 @@ post '/mobamasu' do
 			else
 				return result
 			end
+		end
+	}
+	return ""
+end
+
+
+# -------------------- kwsm --------------------
+
+module KWSM
+	urls = [
+		"http://yomigee.blog87.fc2.com/blog-entry-1615.html",
+		"http://yomigee.blog87.fc2.com/blog-entry-1614.html"
+	]
+
+	agent = Mechanize.new
+	@@images = urls.map {|url|
+		agent.get(url).images_with(:src => /cg/)
+	}.flatten
+	
+	def image_rand
+		@@images[rand(@@images.length)]
+	end
+
+	module_function:image_rand
+end
+
+puts 
+
+post '/kwsm' do
+	content_type :text
+	json = JSON.parse(request.body.string)
+	json["events"].select {|e| e['message'] }.map {|e|
+		text = e["message"]["text"]
+		if /^#kwsm/ =~ text
+			return KWSM.image_rand
 		end
 	}
 	return ""
