@@ -1,3 +1,4 @@
+# -*- encoding: UTF-8 -*-
 # https://github.com/raa0121/raa0121-lingrbot/blob/master/dice.rb
 require 'rubygems'
 require 'sinatra'
@@ -109,7 +110,7 @@ post '/kwsm' do
 	json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
 		if /^#kwsm/ =~ text
-			return "wakaruwa" + KWSM.image_rand
+			return "わかるわ\n" + KWSM.image_rand.src
 		end
 	}
 	return ""
