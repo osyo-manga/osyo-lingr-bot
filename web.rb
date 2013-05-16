@@ -99,7 +99,7 @@ end
 
 
 get '/kwsm' do
-	"<img src=\"#{KWSM.image_rand.node}\">"
+	"<img src=\"#{KWSM.image_rand.src}\">"
 end
 
 
