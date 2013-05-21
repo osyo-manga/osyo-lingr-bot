@@ -1,6 +1,5 @@
 # -*- encoding: UTF-8 -*-
 # https://github.com/raa0121/raa0121-lingrbot/blob/master/dice.rb
-require 'rubygems'
 require 'sinatra'
 require 'json'
 require "mechanize"
@@ -37,7 +36,7 @@ post '/mtg' do
 	json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
 		if /^#MTG/ =~ text
-			result = MTG.image(text[/^#MTG\s*(.+)/, 1]).join("\n")
+			result = MTG.image(text[/^#MTG[\s　]*(.+)/, 1]).join("\n")
 			if result.empty?
 				return "Not found."
 			else
@@ -67,7 +66,7 @@ post '/mobamasu' do
 	json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
 		if /^#mobamasu/ =~ text
-			result = mobamasu_image_rand(text[/^#mobamasu\s*(.+)/, 1])
+			result = mobamasu_image_rand(text[/^#mobamasu[\s　]*(.+)/, 1])
 			if result.empty?
 				return "Not found."
 			else
