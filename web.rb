@@ -4,6 +4,10 @@ require 'sinatra'
 require 'json'
 require "mechanize"
 
+get '/' do
+	"Hello, world"
+end
+
 
 # -------------------- MTG --------------------
 module MTG
@@ -16,9 +20,6 @@ module MTG
 	module_function:image
 end
 
-get '/' do
-	"Hello, world"
-end
 
 get '/mtg' do
 	"MTG"
