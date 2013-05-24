@@ -131,7 +131,7 @@ class ReadingVimrc
 
 	def start
 		@is_running_ = true
-		@members = []
+		@messages = []
 	end
 
 	def stop
@@ -177,7 +177,8 @@ post '/reading_vimrc' do
 			return reading_vimrc.status
 		end
 		if /^!reading_vimrc[\s　]member$/ =~ text
-			return reading_vimrc.members.join("\n")
+			members = reading_vimrc.members
+			return members.empty? ? "だれもいませんでした" : members.join("\n")
 		end
 		if /^!reading_vimrc[\s　]*(.+)$/ =~ text
 			return "Not found command"
