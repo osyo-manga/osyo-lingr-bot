@@ -180,6 +180,20 @@ post '/reading_vimrc' do
 			members = reading_vimrc.members
 			return members.empty? ? "だれもいませんでした" : members.join("\n")
 		end
+		if /^!reading_vimrc[\s　]help$/ =~ text
+			str = <<"EOS"
+vimrc読書会で発言した人を集計するための bot です
+
+!reading_vimrc {command}
+
+"start"  : 集計の開始
+"stop"   : 集計の終了
+"status" : ステータスの出力
+"member" : "start" ～ "stop" の間に発言した人を列挙
+"help"   : 使い方を出力
+EOS
+			return str
+		end
 		if /^!reading_vimrc[\s　]*(.+)$/ =~ text
 			return "Not found command"
 		end
