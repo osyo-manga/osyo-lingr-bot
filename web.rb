@@ -165,16 +165,16 @@ post '/reading_vimrc' do
 	json = JSON.parse(request.body.string)
 	json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
-		if /^!^!reading_vimrc[\s　]start$/ =~ text
+		if /^!reading_vimrc[\s　]start$/ =~ text
 			reading_vimrc.start
 		end
-		if /^!^!reading_vimrc[\s　]end$/ =~ text
+		if /^!reading_vimrc[\s　]end$/ =~ text
 			reading_vimrc.end
 		end
-		if /^!^!reading_vimrc[\s　]status$/ =~ text
+		if /^!reading_vimrc[\s　]status$/ =~ text
 			return reading_vimrc.status
 		end
-		if /^!^!reading_vimrc[\s　]member$/ =~ text
+		if /^!reading_vimrc[\s　]member$/ =~ text
 			return reading_vimrc.members.join("\n")
 		end
 		reading_vimrc.add({:name => e["message"]["speaker_id"], :text => text})
