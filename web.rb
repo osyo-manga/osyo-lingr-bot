@@ -117,3 +117,70 @@ post '/kwsm' do
 end
 
 
+# --------------------reading_vimrc --------------------
+
+class ReadingVimrc
+	def initialize
+		@is_running_ = false
+		@messages = []
+	end
+
+	def is_running?
+		@is_running_
+	end
+
+	def start
+		@is_running_ = true
+		@members = []
+	end
+
+	def end
+		@is_running_ = false
+	end
+	
+	def members
+		@messages.map {|mes| mes[:name] }.uniq
+	end
+
+	def status
+		is_running? ? "started" : "stopped"
+	end
+
+	def add(message)
+		if is_running?
+			@messages << message
+		end
+	end
+end
+
+reading_vimrc = ReadingVimrc.new
+
+get '/reading_vimrc' do
+	"status: #{reading_vimrc.status}<br>members<br>#{reading_vimrc.members.join('<br>')}"
+end
+
+
+post '/reading_vimrc' do
+	content_type :text
+	json = JSON.parse(request.body.string)
+	json["events"].select {|e| e['message'] }.map {|e|
+		text = e["message"]["text"]
+		if /^!^!reading_vimrc[\s　]start$/ =~ text
+			reading_vimrc.start
+		end
+		if /^!^!reading_vimrc[\s　]end$/ =~ text
+			reading_vimrc.end
+		end
+		if /^!^!reading_vimrc[\s　]status$/ =~ text
+			return reading_vimrc.status
+		end
+		if /^!^!reading_vimrc[\s　]member$/ =~ text
+			return reading_vimrc.members.join("\n")
+		end
+		reading_vimrc.add({:name => e["message"]["speaker_id"], :text => text})
+
+	}
+	return ""
+end
+
+
