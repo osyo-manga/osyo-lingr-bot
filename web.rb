@@ -134,7 +134,7 @@ class ReadingVimrc
 		@members = []
 	end
 
-	def end
+	def stop
 		@is_running_ = false
 	end
 	
@@ -167,9 +167,11 @@ post '/reading_vimrc' do
 		text = e["message"]["text"]
 		if /^!reading_vimrc[\s　]start$/ =~ text
 			reading_vimrc.start
+			return "started"
 		end
-		if /^!reading_vimrc[\s　]end$/ =~ text
-			reading_vimrc.end
+		if /^!reading_vimrc[\s　]stop$/ =~ text
+			reading_vimrc.stop
+			return "stoped"
 		end
 		if /^!reading_vimrc[\s　]status$/ =~ text
 			return reading_vimrc.status
@@ -177,8 +179,10 @@ post '/reading_vimrc' do
 		if /^!reading_vimrc[\s　]member$/ =~ text
 			return reading_vimrc.members.join("\n")
 		end
+		if /^!reading_vimrc[\s　]*(.+)$/ =~ text
+			return "Not found command"
+		end
 		reading_vimrc.add({:name => e["message"]["speaker_id"], :text => text})
-
 	}
 	return ""
 end
