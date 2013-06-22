@@ -85,9 +85,6 @@ get '/test' do
 	"test"
 end
 
-
-agent = Mechanize.new
-
 post '/test' do
 	content_type :text
 	json = JSON.parse(request.body.string)
@@ -95,7 +92,8 @@ post '/test' do
 		m = e["message"]["text"]
 
 		if /^http:\/\/www.pixiv.net\/member_illust.php\?mode=medium&illust_id=\d+/ =~ m
-			agent.get(m)
+		agent = Mechanize.new
+		agent.get(m)
 			pixiv = agent.page.at('a.medium-image').children[0].attributes["src"].value
 			file = Time.now.to_i
 			agent.get(pixiv, nil,
