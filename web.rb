@@ -101,7 +101,7 @@ post '/test' do
 					  nil).save("./pixiv_#{file}.png")
 			gyazo = Gyazo.new ""
 			result = gyazo.upload "pixiv_#{file}.png"
-			File.delete("pixiv_#{file}.png")
+# 			File.delete("pixiv_#{file}.png")
 			return result
 # 			return "pixiv_#{file}.png"
 		end
