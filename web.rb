@@ -87,7 +87,7 @@ post '/test' do
 	content_type :text
 	json = JSON.parse(request.body.string)
 	json["events"].select {|e| e['message'] }.map {|e|
-		text = e["message"]["text"]
+		m = e["message"]["text"]
 
 		if /^http:\/\/www.pixiv.net\/member_illust.php\?mode=medium&illust_id=\d+/ =~ m
 			agent = Mechanize.new
