@@ -41,6 +41,6 @@ PLATFORMS
 
 DEPENDENCIES
   json
-  mechanize
+  mechanize (= 2.6.0)
   sinatra
   thin
