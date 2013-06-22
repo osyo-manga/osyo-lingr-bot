@@ -3,6 +3,8 @@
 require 'sinatra'
 require 'json'
 require "mechanize"
+load "gyazo.rb"
+
 
 get '/' do
 	"Hello, world"
@@ -99,10 +101,11 @@ post '/test' do
 			agent.get(pixiv, nil,
 					  "http://www.pixiv.net",
 					  nil).save("./pixiv_#{file}.png")
+			gyazo = Gyazo.new ""
+			result = gyazo.upload "pixiv_#{file}.png"
 			File.delete("pixiv_#{file}.png")
-			return "pixiv_#{file}.png"
-# 			url = `./gyazo pixiv_#{file}.png`.gsub("\n","")
-# 			return "#{url.sub("//","//cache.")}.png"
+			return result
+# 			return "pixiv_#{file}.png"
 		end
 	}
 	return ""
