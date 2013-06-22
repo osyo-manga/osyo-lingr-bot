@@ -90,6 +90,7 @@ post '/test' do
 		text = e["message"]["text"]
 
 		if /^http:\/\/www.pixiv.net\/member_illust.php\?mode=medium&illust_id=\d+/ =~ m
+			agent = Mechanize.new
 			agent.get(m)
 			pixiv = agent.page.at('a.medium-image').children[0].attributes["src"].value
 			file = Time.now.to_i
@@ -98,7 +99,7 @@ post '/test' do
 					  nil).save("./pixiv_#{file}.png") 
 			url = `./gyazo pixiv_#{file}.png`.gsub("\n","")
 			File.delete("pixiv_#{file}.png")
-			"#{url.sub("//","//cache.")}.png"
+			return "#{url.sub("//","//cache.")}.png"
 		end
 	}
 	return ""
