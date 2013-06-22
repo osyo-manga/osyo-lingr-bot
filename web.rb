@@ -79,6 +79,9 @@ end
 
 
 # test
+get '/test' do
+	"test"
+end
 
 post '/test' do
 	content_type :text
