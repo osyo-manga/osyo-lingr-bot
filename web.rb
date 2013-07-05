@@ -147,8 +147,8 @@ post '/gyazo' do
 		text = e["message"]["text"]
 		room = e["message"]["room"]
 
-		if /^(http:\/\/www.amazon.+)/ =~ text
-			post_lingr_gyazo(room, text[/^(http:\/\/www.amazon.+)/, 1], 800, 500)
+		if /^(http:\/\/www\.amazon.+)/ =~ text
+			post_lingr_gyazo(room, text[/^(http:\/\/www\.amazon.+)/, 1], 800, 500)
 # 			post_lingr_gyazo(room, "http://www.amazon.co.jp/" + text[/http:\/\/www\.amazon\.co\.jp\/.*(dp\/[A-Z0-9]+).*/, 1], 800, 500)
 		end
 		if /^#gyazo[\s　]*(http.+)/ =~ text
