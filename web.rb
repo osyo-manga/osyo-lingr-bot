@@ -3,6 +3,11 @@
 require 'sinatra'
 require 'json'
 require "mechanize"
+require 'set'
+require 'digest/sha1'
+require 'erb'
+require 'open-uri'
+
 load "gyazo.rb"
 
 
@@ -109,4 +114,45 @@ post '/test' do
 	return ""
 end
 
+
+# -------------------- gyazo --------------------
+def post_lingr_gyazo(room, url, width, height)
+	Thread.start do
+		url = "http://trickstar.herokuapp.com/api/gyazo/?url=#{url}&bottom=#{height}&right=#{width}"
+
+		result = ""
+		open(url){ |f|
+			result += f.read + "\n"
+		}
+
+		param = {
+			room: room,
+			bot: 'gyazo',
+			text: result,
+			bot_verifier: ENV['GYAZO_BOT_KEY']
+		}.tap {|p| p[:bot_verifier] = Digest::SHA1.hexdigest(p[:bot] + p[:bot_verifier]) }
+
+		query_string = param.map {|e|
+			e.map {|s| ERB::Util.url_encode s.to_s }.join '='
+		}.join '&'
+		open "http://lingr.com/api/room/say?#{query_string}"
+	end
+end
+
+
+post '/gyazo' do
+	content_type :text
+	json = JSON.parse(request.body.string)
+	json["events"].select {|e| e['message'] }.map {|e|
+		text = e["message"]["text"]
+
+		if /^(http:\/\/www.amazon.+)/ =~ text
+			post_lingr_gyazo(text[/^(http:\/\/www.amazon.+)/, 1], 800, 500)
+		end
+		if /^#gyazo[\s　]*(http.+)/ =~ text
+			post_lingr_gyazo(text[/^#gyazo[\s　]*(http.+)/, 1], 800, 500)
+		end
+	}
+	return ""
+end
 
