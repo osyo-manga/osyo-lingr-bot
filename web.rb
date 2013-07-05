@@ -155,8 +155,8 @@ post '/gyazo' do
 			post_lingr_gyazo(room, text[/^#gyazo[\s　]*(http.+)/, 1], 0, 800)
 		end
 		if /^#image[\s　]*(.+)/ =~ text
-			word = text[/^#image[\s　]*(.+)/, 1].split(/[\s　]/).map {|s| ERB::Util.url_encode s }.join("+q=")
-			url = "http://www.google.co.jp/search?&q=#{word}&tbm=isch"
+			word = text[/^#image[\s　]*(.+)/, 1].split(/[\s　]/).map {|s| ERB::Util.url_encode s }.join("+")
+			url = "http://www.google.co.jp/search?%26q=#{word}%26tbm=isch"
 			post_lingr_gyazo(room, url, 0, 800)
 		end
 	}
