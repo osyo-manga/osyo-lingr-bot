@@ -145,12 +145,13 @@ post '/gyazo' do
 	json = JSON.parse(request.body.string)
 	json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
+		room = e["message"]["room"]
 
 		if /^(http:\/\/www.amazon.+)/ =~ text
 			post_lingr_gyazo(text[/^(http:\/\/www.amazon.+)/, 1], 800, 500)
 		end
 		if /^#gyazo[\s　]*(http.+)/ =~ text
-			post_lingr_gyazo(text[/^#gyazo[\s　]*(http.+)/, 1], 800, 500)
+			post_lingr_gyazo(room, text[/^#gyazo[\s　]*(http.+)/, 1], 800, 500)
 		end
 	}
 	return ""
