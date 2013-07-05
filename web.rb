@@ -118,7 +118,7 @@ end
 # -------------------- gyazo --------------------
 def post_lingr_gyazo(room, url, width, height)
 	Thread.start do
-		url = "http://trickstar.herokuapp.com/api/gyazo/?url=#{url}&bottom=#{height}&right=#{width}"
+		url = "http://trickstar.herokuapp.com/api/gyazo/?url=#{url.gsub(/&/, "%26")}&bottom=#{height}&right=#{width}"
 
 		result = ""
 		open(url){ |f|
