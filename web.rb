@@ -151,7 +151,7 @@ post '/gyazo' do
 			post_lingr_gyazo(room, text[/^(http:\/\/www.amazon.+)/, 1], 800, 500)
 		end
 		if /^#gyazo[\s　]*(http.+)/ =~ text
-			post_lingr_gyazo(room, text[/^#gyazo[\s　]*(http.+)/, 1], 800, 600)
+			post_lingr_gyazo(room, text[/^#gyazo[\s　]*(http.+)/, 1], 800, 0)
 		end
 	}
 	return ""
