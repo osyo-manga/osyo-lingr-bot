@@ -118,17 +118,17 @@ end
 # -------------------- gyazo --------------------
 def post_lingr_gyazo(room, url, width, height)
 	Thread.start do
-		url = "http://trickstar.herokuapp.com/api/gyazo/?url=#{url.gsub(/&/, "%26")}&bottom=#{height}&right=#{width}"
+		cmd = "http://trickstar.herokuapp.com/api/gyazo/?url=#{url.gsub(/&/, "%26")}&bottom=#{height}&right=#{width}"
 
 		result = ""
-		open(url){ |f|
+		open(cmd){ |f|
 			result += f.read + "\n"
 		}
 
 		param = {
 			room: room,
 			bot: 'gyazo',
-			text: result,
+			text: url + "\n" + result,
 			bot_verifier: ENV['GYAZO_BOT_KEY']
 		}.tap {|p| p[:bot_verifier] = Digest::SHA1.hexdigest(p[:bot] + p[:bot_verifier]) }
 
