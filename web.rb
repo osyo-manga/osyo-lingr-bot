@@ -163,3 +163,28 @@ post '/gyazo' do
 	return ""
 end
 
+
+# -------------------- vimhelpjp --------------------
+post '/vimhelpjp' do
+	content_type :text
+	json = JSON.parse(request.body.string)
+	json["events"].select {|e| e['message'] }.map {|e|
+		text = e["message"]["text"]
+		room = e["message"]["room"]
+
+		if /^:help[\s　]*(.+)/ =~ text
+			query = text[/^:help[\s　]*(.+)/, 1]
+			url = "http://vim-help-jp.herokuapp.com/api/?query=#{ERB::Util.url_encode query}"
+			result = ""
+			open(url){ |f|
+				result += f.read + "\n"
+			}
+			return result
+		end
+	}
+	return ""
+end
+
+
+
+
