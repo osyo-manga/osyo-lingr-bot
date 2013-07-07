@@ -176,7 +176,7 @@ post '/vimhelpjp' do
 			query = text[/^:help[\s　]*(.+)/, 1]
 			url = "http://vim-help-jp.herokuapp.com/api/?query=#{ERB::Util.url_encode query}"
 			result = open(url).read
-			return result == "\n" ? "Not found" : result
+			return result.empty? ? "Not found" : result
 		end
 	}
 	return ""
