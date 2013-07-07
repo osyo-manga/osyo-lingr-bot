@@ -179,7 +179,7 @@ post '/vimhelpjp' do
 			open(url){ |f|
 				result += f.read + "\n"
 			}
-			return result
+			return result == "\n" ? "Not found" : result
 		end
 	}
 	return ""
