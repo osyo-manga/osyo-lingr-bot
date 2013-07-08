@@ -72,7 +72,7 @@ post '/mobamasu' do
 	json = JSON.parse(request.body.string)
 	json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
-		if /^#mobamasu/ =~ text
+		if /^#mobamasu[\s　]*(.+)/ =~ text
 			result = mobamasu_image_rand(text[/^#mobamasu[\s　]*(.+)/, 1])
 			if result.empty?
 				return "Not found."
