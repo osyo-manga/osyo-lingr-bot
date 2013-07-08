@@ -116,9 +116,9 @@ end
 
 
 # -------------------- gyazo --------------------
-def post_lingr_gyazo(room, url, width, height)
+def post_lingr_gyazo(room, url, width, height, top=0, left=0)
 	Thread.start do
-		cmd = "http://trickstar.herokuapp.com/api/gyazo/?url=#{url.gsub(/&/, "%26")}&bottom=#{height}&right=#{width}"
+		cmd = "http://trickstar.herokuapp.com/api/gyazo/?url=#{url.gsub(/&/, "%26")}&bottom=#{height}&right=#{width}&top=#{top}&left=#{left}"
 
 		result = ""
 		open(cmd){ |f|
@@ -152,7 +152,7 @@ post '/gyazo' do
 # 			post_lingr_gyazo(room, "http://www.amazon.co.jp/" + text[/http:\/\/www\.amazon\.co\.jp\/.*(dp\/[A-Z0-9]+).*/, 1], 800, 500)
 		end
 		if /^#gyazo[\s　]*(http.+)/ =~ text
-			post_lingr_gyazo(room, text[/^#gyazo[\s　]*(http.+)/, 1], 0, 800)
+			post_lingr_gyazo(room, text[/^#gyazo[\s　]*(http.+)/, 1], 0, 800, 140, 100)
 		end
 		if /^#image[\s　]*(.+)/ =~ text
 			word = text[/^#image[\s　]*(.+)/, 1].split(/[\s　]/).map {|s| ERB::Util.url_encode s }.join("+")
