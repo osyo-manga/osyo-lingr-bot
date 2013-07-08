@@ -57,7 +57,7 @@ end
 
 # -------------------- mobamasu --------------------
 def mobamasu_image_rand(name)
-	url = "http://mobile-trade.jp/fun/idolmaster/card.php?_name=#{name}"
+	url = "http://mobile-trade.jp/fun/idolmaster/card.php?_name=#{ERB::Util.url_encode name}"
 	agent = Mechanize.new
 	agent.get(url)
 	result = agent.page.links_with(:href => /Fidolmaster/)
