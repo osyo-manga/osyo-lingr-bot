@@ -56,8 +56,36 @@ end
 
 
 # -------------------- mobamasu --------------------
+<<<<<<< HEAD
 def mobamasu_image_rand(name)
 	url = "http://mobile-trade.jp/fun/idolmaster/card.php?_name=#{ERB::Util.url_encode name}"
+=======
+def mobamasu_image_rand(name, rarity)
+	if rarity.nil?
+		url = "http://mobile-trade.jp/fun/idolmaster/card.php?_name=#{name}"
+	else
+		rarities = rarity.split(/,/)
+		rarity_param = rarities.map do |r|
+			'rarity%5B%5D=' + case r
+			when 'N'
+				"1"
+			when 'N+'
+				"2"
+			when 'R'
+				"3"
+			when 'R+'
+				"4"
+			when 'SR'
+				"5"
+			when 'SR+'
+				"6"
+			else
+				"1"
+			end
+		end.join('&')
+		url = "http://mobile-trade.jp/fun/idolmaster/card.php?_name=#{name}&#{rarity_param}"
+	end
+>>>>>>> b489d9be549cbaac6e04bf8f373eb60bf6546fc8
 	agent = Mechanize.new
 	agent.get(url)
 	result = agent.page.links_with(:href => /Fidolmaster/)
@@ -73,7 +101,11 @@ post '/mobamasu' do
 	json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
 		if /^#mobamasu[\s　]*(.+)/ =~ text
-			result = mobamasu_image_rand(text[/^#mobamasu[\s　]*(.+)/, 1])
+			(op, name, rarity) = text.split(/[\s　]+/, 3)
+			if name.nil?
+				return ""
+			end
+			result = mobamasu_image_rand(name, rarity)
 			if result.empty?
 				return "Not found."
 			else
