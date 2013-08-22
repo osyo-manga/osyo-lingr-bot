@@ -56,13 +56,9 @@ end
 
 
 # -------------------- mobamasu --------------------
-<<<<<<< HEAD
-def mobamasu_image_rand(name)
-	url = "http://mobile-trade.jp/fun/idolmaster/card.php?_name=#{ERB::Util.url_encode name}"
-=======
 def mobamasu_image_rand(name, rarity)
 	if rarity.nil?
-		url = "http://mobile-trade.jp/fun/idolmaster/card.php?_name=#{name}"
+		url = "http://mobile-trade.jp/fun/idolmaster/card.php?_name=#{ERB::Util.url_encode name}"
 	else
 		rarities = rarity.split(/,/)
 		rarity_param = rarities.map do |r|
@@ -83,9 +79,8 @@ def mobamasu_image_rand(name, rarity)
 				"1"
 			end
 		end.join('&')
-		url = "http://mobile-trade.jp/fun/idolmaster/card.php?_name=#{name}&#{rarity_param}"
+		url = "http://mobile-trade.jp/fun/idolmaster/card.php?_name=#{ERB::Util.url_encode name}&#{rarity_param}"
 	end
->>>>>>> b489d9be549cbaac6e04bf8f373eb60bf6546fc8
 	agent = Mechanize.new
 	agent.get(url)
 	result = agent.page.links_with(:href => /Fidolmaster/)
