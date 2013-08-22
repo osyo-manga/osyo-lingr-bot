@@ -58,7 +58,7 @@ end
 # -------------------- mobamasu --------------------
 def mobamasu_image_rand(name, rarity)
 	if rarity.nil?
-		p url = "http://mobile-trade.jp/fun/idolmaster/card.php?_name=#{name}"
+		url = "http://mobile-trade.jp/fun/idolmaster/card.php?_name=#{name}"
 	else
 		rarities = rarity.split(/,/)
 		rarity_param = rarities.map do |r|
@@ -79,7 +79,7 @@ def mobamasu_image_rand(name, rarity)
 				"1"
 			end
 		end.join('&')
-		p url = "http://mobile-trade.jp/fun/idolmaster/card.php?_name=#{name}&#{rarity_param}"
+		url = "http://mobile-trade.jp/fun/idolmaster/card.php?_name=#{name}&#{rarity_param}"
 	end
 	agent = Mechanize.new
 	agent.get(url)
