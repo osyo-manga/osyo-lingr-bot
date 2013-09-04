@@ -90,22 +90,30 @@ def mobamasu_image_rand(name, rarity)
 	result[rand(result.length)].href
 end
 
+def get_mobamasu_image(text, frame = false)
+	(op, name, rarity) = text.split(/[\s　]+/, 3)
+	if name.nil?
+		return ""
+	end
+	result = mobamasu_image_rand(name, rarity)
+	if result.empty?
+		return "Not found."
+	else
+		return frame ? result : result.sub(/%2Fl%2F/, "%2Fl_noframe%2F")
+	end
+end
+
+
 post '/mobamasu' do
 	content_type :text
 	json = JSON.parse(request.body.string)
 	json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
-		if /^#mobamasu[\s　]*(.+)/ =~ text
-			(op, name, rarity) = text.split(/[\s　]+/, 3)
-			if name.nil?
-				return ""
-			end
-			result = mobamasu_image_rand(name, rarity)
-			if result.empty?
-				return "Not found."
-			else
-				return result
-			end
+		if /^#mobamasu[\s　]+(.+)/ =~ text
+			return get_mobamasu_image(text)
+		end
+		if /^#mobamasu_frame[\s　]+(.+)/ =~ text
+			return get_mobamasu_image(text, true)
 		end
 	}
 	return ""
