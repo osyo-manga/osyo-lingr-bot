@@ -110,10 +110,9 @@ post '/mobamasu' do
 	json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
 		if /^#mobamasu[\s　]+(.+)/ =~ text
-			return get_mobamasu_image(text)
-		end
-		if /^#mobamasu_frame[\s　]+(.+)/ =~ text
 			return get_mobamasu_image(text, true)
+		elsif /^#mobamasu_no_frame[\s　]+(.+)/ =~ text
+			return get_mobamasu_image(text)
 		end
 	}
 	return ""
