@@ -156,7 +156,7 @@ def post_lingr_gyazo(room, url, width, height, top=0, left=0)
 
 		result = ""
 		open(cmd){ |f|
-			result += f.read + "\n"
+			result += f.read
 		}
 
 		param = {
