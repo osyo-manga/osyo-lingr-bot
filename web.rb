@@ -56,9 +56,9 @@ end
 
 
 # -------------------- mobamasu --------------------
-def mobamasu_image_rand(name, rarity)
+def mobamasu_image_rand(search_word, rarity, regexp)
 	if rarity.nil?
-		url = "http://mobile-trade.jp/fun/idolmaster/card.php?_name=#{ERB::Util.url_encode name}"
+		url = "http://mobile-trade.jp/fun/idolmaster/card.php?_name=#{ERB::Util.url_encode search_word}"
 	else
 		rarities = rarity.split(/,/)
 		rarity_param = rarities.map do |r|
@@ -79,24 +79,47 @@ def mobamasu_image_rand(name, rarity)
 				"1"
 			end
 		end.join('&')
-		url = "http://mobile-trade.jp/fun/idolmaster/card.php?_name=#{ERB::Util.url_encode name}&#{rarity_param}"
+		url = "http://mobile-trade.jp/fun/idolmaster/card.php?_name=#{ERB::Util.url_encode search_word}&#{rarity_param}"
 	end
 	agent = Mechanize.new
 	agent.get(url)
-	result = agent.page.links_with(:href => /Fidolmaster/)
-	if result.empty?
+	cards = agent.page.search("table.card_search_result_table").to_a
+	if cards.empty?
 		return ""
 	end
-	result[rand(result.length)].href
+	if not regexp.nil?
+		cards = cards.select { |card|
+			name = card.at("tbody tr:first-child td:first-child div a").text
+			regexp.match(name)
+		}
+	end
+	result = cards[rand(cards.length)]
+	if result.nil?
+		nil
+	else
+		name = result.at("tbody tr:first-child td:first-child div a").text
+		image_url = result.at("img").attributes["src"].value
+		"#{name}\n#{image_url}"
+	end
 end
 
 def get_mobamasu_image(text, frame = false)
-	(op, name, rarity) = text.split(/[\s　]+/, 3)
-	if name.nil?
+	(op, search_word, *args) = text.split(/[\s　]+/, 4)
+	if search_word.nil?
 		return ""
 	end
-	result = mobamasu_image_rand(name, rarity)
-	if result.empty?
+	rarity = nil
+	regexp = nil
+	args.each do |arg|
+		if arg =~ /^(N|N\+|R|R\+|SR|SR\+)(,(N|N\+|R|R\+|SR|SR\+))*$/
+			rarity = arg
+		end
+		if arg =~ /^\/.*\/$/
+			regexp = Regexp.new(arg[1..-2])
+		end
+	end
+	result = mobamasu_image_rand(search_word, rarity, regexp)
+	if result.nil?
 		return "Not found."
 	else
 		return frame ? result : result.sub(/%2Fl%2F/, "%2Fl_noframe%2F")
