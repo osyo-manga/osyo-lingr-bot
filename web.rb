@@ -98,7 +98,7 @@ def mobamasu_image_rand(search_word, rarity, regexp)
 		nil
 	else
 		name = result.at("tbody tr:first-child td:first-child div a").text
-		image_url = result.at("img").attributes["src"].value
+		image_url = result.at("tbody tr:nth-of-type(2) td:first-child a").attributes["href"].value
 		"#{name}\n#{image_url}"
 	end
 end
