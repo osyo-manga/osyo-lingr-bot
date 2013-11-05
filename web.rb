@@ -114,7 +114,7 @@ def mobamasu_image_rand(search_word, rarity, regexp)
 			skill = $1
 			effect = $2
 		end
-		"#{name}\n#{image_url}\n#{rarity_str} ｺｽﾄ:#{cost} 攻:#{str} 守:#{con}" + (skill.nil? ? "" : " ｽｷﾙ:#{skill} 効果:#{effect}")
+		"#{name}\n#{image_url}\n#{rarity_str} ｺｽﾄ:#{cost} " + (skill.nil? ? "" : " ｽｷﾙ:#{skill} 効果:#{effect}")
 	end
 end
 
