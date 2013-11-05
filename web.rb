@@ -134,7 +134,7 @@ post '/mobamasu' do
 		text = e["message"]["text"]
 		if /^#mobamasu[\s　]+(.+)/ =~ text
 			return get_mobamasu_image(text, true)
-		elsif /^#mobamasu_no_frame[\s　]+(.+)/ =~ text
+		elsif /^(#mobamasu_no_frame|#mobamasu!)[\s　]+(.+)/ =~ text
 			return get_mobamasu_image(text)
 		end
 	}
