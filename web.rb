@@ -99,7 +99,22 @@ def mobamasu_image_rand(search_word, rarity, regexp)
 	else
 		name = result.at("tbody tr:first-child td:first-child div a").text
 		image_url = result.at("tbody tr:nth-of-type(2) td:first-child a").attributes["href"].value
-		"#{name}\n#{image_url}"
+		rarity_str = result.at("tbody tr:first-child td:first-child div a:last-child").text
+		statuses = result.at("tbody tr:nth-of-type(3) td:first-child").text
+		if statuses =~ /攻:(\d+\/\d+)/
+			str = $1
+		end
+		if statuses =~ /守:(\d+\/\d+)/
+			con = $1
+		end
+		if statuses =~ /ｺｽﾄ:(\d+)/
+			cost = $1
+		end
+		if statuses =~ /ｽｷﾙ:(.*)[\s　]*ｽｷﾙ効果:(.*?)[\s　]*$/
+			skill = $1
+			effect = $2
+		end
+		"#{image_url}\n#{name}\n#{rarity_str} ｺｽﾄ:#{cost} 攻:#{str} 守:#{con}" + (skill.nil? ? "" : " ｽｷﾙ:#{skill} 効果:#{effect}")
 	end
 end
 
