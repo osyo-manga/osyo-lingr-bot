@@ -104,7 +104,7 @@ def mobamasu_image_rand(search_word, rarity, regexp)
 		if statuses =~ /攻:(\d+\/\d+)/
 			str = $1
 		end
-		if statuses =~ /守:(\d+\/\d+)/
+		if statuses =~ /守:(\d+\/\d+)/ or statuses =~ /防:(\d+\/\d+)/
 			con = $1
 		end
 		if statuses =~ /ｺｽﾄ:(\d+)/
