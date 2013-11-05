@@ -135,7 +135,7 @@ def get_mobamasu_image(text, frame = false)
 	end
 	result = mobamasu_image_rand(search_word, rarity, regexp)
 	if result.nil?
-		return "Not found."
+		return "#{search_word} is not found."
 	else
 		return frame ? result : result.sub(/%2Fl%2F/, "%2Fl_noframe%2F")
 	end
