@@ -85,7 +85,7 @@ def mobamasu_image_rand(search_word, rarity, regexp)
 	agent.get(url)
 	cards = agent.page.search("table.card_search_result_table").to_a
 	if cards.empty?
-		return ""
+		return nil
 	end
 	if not regexp.nil?
 		cards = cards.select { |card|
