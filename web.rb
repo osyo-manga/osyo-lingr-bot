@@ -7,6 +7,7 @@ require 'set'
 require 'digest/sha1'
 require 'erb'
 require 'open-uri'
+require 'nkf'
 
 load "gyazo.rb"
 
@@ -89,7 +90,7 @@ def mobamasu_image_rand(search_word, rarity, regexp)
 	end
 	if not regexp.nil?
 		cards = cards.select { |card|
-			name = card.at("tbody tr:first-child td:first-child div a").text
+			name = NKF::nkf('-WwXm0', card.at("tbody tr:first-child td:first-child div a").text)
 			regexp.match(name)
 		}
 	end
@@ -130,7 +131,7 @@ def get_mobamasu_image(text, frame = false)
 			rarity = arg
 		end
 		if arg =~ /^\/.*\/$/
-			regexp = Regexp.new(arg[1..-2])
+			regexp = Regexp.new(NKF::nkf('-WwXm0', arg[1..-2]))
 		end
 	end
 	result = mobamasu_image_rand(search_word, rarity, regexp)
