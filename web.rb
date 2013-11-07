@@ -91,7 +91,13 @@ def mobamasu_image_rand(search_word, rarity, regexp)
 	if not regexp.nil?
 		cards = cards.select { |card|
 			name = NKF::nkf('-WwXm0', card.at("tbody tr:first-child td:first-child div a").text)
-			regexp.match(name)
+			statuses = card.at("tbody tr:nth-of-type(3) td:first-child").text
+			if statuses =~ /ｽｷﾙ:(.*)[\s　]*ｽｷﾙ効果:(.*?)[\s　]*$/
+				skill = NKF::nkf('-WwXm0', $1)
+				regexp.match(name) or regexp.match(skill) or regexp.match(skill[1..-2])
+			else
+				regexp.match(name)
+			end
 		}
 	end
 	result = cards[rand(cards.length)]
