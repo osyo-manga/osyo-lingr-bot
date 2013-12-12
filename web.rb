@@ -357,4 +357,8 @@ post '/wandbox' do
 	return ""
 end
 
+get '/wandbox' do
+	return "wandbox"
+end
+
 
