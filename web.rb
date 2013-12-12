@@ -293,22 +293,31 @@ func(){
 
 template<typename F>
 auto
-output(F func, int)
+output(F func, bool&&)
 ->decltype(std::cout << func()){
 	return std::cout << func();
 }
 
 
 template<typename F>
-void
-output(F func, long){
+auto
+output(F const& func, bool const&&)
+->decltype(func()){
 	func();
+}
+
+
+template<typename T>
+auto
+output(T const& value, bool const&)
+->decltype(std::cout << value){
+	return std::cout << value;
 }
 
 
 int
 main(){
-	output(func, 0);
+	output(func(), false);
 	return 0;
 }
 EOS
@@ -350,7 +359,9 @@ post '/wandbox' do
 		text = e["message"]["text"]
 		room = e["message"]["room"]
 
-		if /^!wandbox-cpp[\s　]*(.+)/ =~ text
+		if /^!wandbox-cpp[\s　]*help/ =~ text
+			return "!wandbox-cpp {expr} で {expr} の結果を返します。\n{expr} には結果が標準出力可能な式、もしくはラムダ式が設定できます\nラムダ式の場合はラムダ式が評価された結果が出力されます"
+		elsif /^!wandbox-cpp[\s　]*(.+)/ =~ text
 			post_lingr_wandbox(room, $1)
 		end
 	}
