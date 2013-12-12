@@ -288,7 +288,7 @@ def compile(expr)
 
 auto
 func(){
-	return (#{expr});
+	return #{expr};
 }
 
 template<typename F>
