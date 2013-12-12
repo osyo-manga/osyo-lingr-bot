@@ -8,12 +8,27 @@ require 'digest/sha1'
 require 'erb'
 require 'open-uri'
 require 'nkf'
+require "net/http"
 
 load "gyazo.rb"
 
 
 get '/' do
 	"Hello, world"
+end
+
+def post(room, bot, text, key)
+		param = {
+		room: room,
+		bot: bot,
+		text: text,
+		bot_verifier: key
+	}.tap {|p| p[:bot_verifier] = Digest::SHA1.hexdigest(p[:bot] + p[:bot_verifier]) }
+
+	query_string = param.map {|e|
+		e.map {|s| ERB::Util.url_encode s.to_s }.join '='
+	}.join '&'
+	open "http://lingr.com/api/room/say?#{query_string}"
 end
 
 
@@ -262,5 +277,84 @@ post '/vimhelpjp' do
 end
 
 
+# -------------------- wandbox --------------------
+def compile(expr)
+	code = <<"EOS"
+#include <iosfwd>
+#include <iostream>
+#include <functional>
+#include <algorithm>
+
+
+auto
+func(){
+	return (#{expr});
+}
+
+template<typename F>
+auto
+output(F func, int)
+->decltype(std::cout << func()){
+	return std::cout << func();
+}
+
+
+template<typename F>
+void
+output(F func, long){
+	func();
+}
+
+
+int
+main(){
+	output(func, 0);
+	return 0;
+}
+EOS
+
+	body = {
+		"code" => code,
+		"options" => "gnu++1y",
+		"compiler" => "clang-head",
+	}
+
+	uri = URI.parse("http://melpon.org/wandbox/api/compile.json")
+
+	request = Net::HTTP::Post.new(uri.request_uri, initheader = { "Content-type" => "application/json" },)
+	request.body = body.to_json
+
+	http = Net::HTTP.new(uri.host, uri.port)
+	# http.set_debug_output $stderr
+
+	http.start do |http|
+		response = http.request(request)
+		return JSON.parse(response.body)["program_output"]
+	end
+end
+
+
+def post_lingr_wandbox(room, code)
+	Thread.start do
+		result = compile(code)
+		result = result.empty? ? "Error" : result
+		post(room, "wandbox", result, ENV['WANDBOX_BOT_KEY'])
+	end
+end
+
+
+post '/wandbox' do
+	content_type :text
+	json = JSON.parse(request.body.string)
+	json["events"].select {|e| e['message'] }.map {|e|
+		text = e["message"]["text"]
+		room = e["message"]["room"]
+
+		if /^!wandbox-cpp[\s　]*(.+)/ =~ text
+			post_lingr_wandbox(room, $1)
+		end
+	}
+	return ""
+end
 
 
