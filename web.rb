@@ -337,7 +337,7 @@ end
 def post_lingr_wandbox(room, code)
 	Thread.start do
 		result = compile(code)
-		result = result ? result : "Error"
+		result = JSON.parse(response.body)
 		post(room, "wandbox", result, ENV['WANDBOX_BOT_KEY'])
 	end
 end
