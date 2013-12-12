@@ -329,6 +329,7 @@ EOS
 
 	http.start do |http|
 		response = http.request(request)
+		result = JSON.parse(response.body)
 		return result["program_output"] ? result["program_output"] : result["compiler_error"]
 	end
 end
@@ -337,7 +338,6 @@ end
 def post_lingr_wandbox(room, code)
 	Thread.start do
 		result = compile(code)
-		result = JSON.parse(response.body)
 		post(room, "wandbox", result, ENV['WANDBOX_BOT_KEY'])
 	end
 end
