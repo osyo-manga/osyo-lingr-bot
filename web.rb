@@ -280,10 +280,13 @@ end
 # -------------------- wandbox --------------------
 def compile(expr)
 	code = <<"EOS"
-#include <iosfwd>
 #include <iostream>
 #include <functional>
 #include <algorithm>
+#include <string>
+#include <tuple>
+#include <typeinfo>
+#include <boost/config.hpp>
 
 
 auto
