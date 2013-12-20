@@ -327,7 +327,7 @@ EOS
 
 	body = {
 		"code" => code,
-		"options" => "gnu++1y",
+		"options" => "c++1y,boost-1.55",
 		"compiler" => "clang-head",
 	}
 
