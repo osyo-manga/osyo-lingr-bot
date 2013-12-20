@@ -289,6 +289,19 @@ def compile(expr)
 #include <boost/config.hpp>
 
 
+template<typename T>
+void
+print_type(){
+	T* value;
+}
+
+template<typename T>
+void
+print_type(T){
+	T* value;
+}
+
+
 auto
 func(){
 	return #{expr};
@@ -327,7 +340,7 @@ EOS
 
 	body = {
 		"code" => code,
-		"options" => "c++1y,boost-1.55",
+		"options" => "c++1y,boost-1.55,warning",
 		"compiler" => "clang-head",
 	}
 
