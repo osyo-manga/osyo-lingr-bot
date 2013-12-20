@@ -309,7 +309,7 @@ func(){
 
 template<typename F>
 auto
-output(F func, bool&&)
+output_impl(F func, bool&&)
 ->decltype(std::cout << func()){
 	return std::cout << func();
 }
@@ -317,7 +317,7 @@ output(F func, bool&&)
 
 template<typename F>
 auto
-output(F const& func, bool const&&)
+output_impl(F const& func, bool const&&)
 ->decltype(func()){
 	func();
 }
@@ -325,15 +325,30 @@ output(F const& func, bool const&&)
 
 template<typename T>
 auto
-output(T const& value, bool const&)
+output_impl(T const& value, bool const&)
 ->decltype(std::cout << value){
 	return std::cout << value;
 }
 
 
+template<typename F>
+auto
+output(F func, bool&&)
+->decltype(output_impl(func(), true)){
+	return output_impl(func(), true);
+}
+
+
+template<typename F>
+void
+output(F func, bool const&&){
+	func();
+}
+
+
 int
 main(){
-	output(func(), false);
+	output(func, false);
 	return 0;
 }
 EOS
