@@ -419,7 +419,7 @@ def post_lingr_codic(room, query)
 	Thread.start do
 		text = NAMING.find_to_string(query)
 		if text.empty?
-			return "Not found."
+			text = "Not found."
 		end
 		post(room, "codic", text, ENV['CODIC_BOT_KEY'])
 	end
