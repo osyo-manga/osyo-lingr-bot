@@ -7,8 +7,8 @@ class Entry
 		@csv = CSV.read(csv_file, :encoding => 'UTF-8')
 	end
 
-	def find_word(word)
-		@csv.select { | line | /#{word}/i =~ line[1] }
+	def find_word(query)
+		@csv.select { | line | /#{Regexp.escape(query)}/i =~ line[1] }
 	end
 end
 
