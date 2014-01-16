@@ -413,6 +413,14 @@ end
 NAMING = Naming.new("codic")
 
 
+def post_lingr_codic(room, query)
+	Thread.start do
+		text = NAMING.find_to_string(query)
+		post(room, "codic", text, ENV['CODIC_BOT_KEY'])
+	end
+end
+
+
 get '/codic/api/text' do
 	query  = params[:query]
 	if !query
@@ -431,7 +439,7 @@ post '/codic/lingr' do
 		room = e["message"]["room"]
 		
 		if /#codic\s+(.+)/ =~ text
-			return NAMING.find_to_string($1)
+			post_lingr_codic(room, $1)
 		end
 	}
 	return ""
