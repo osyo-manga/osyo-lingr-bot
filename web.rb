@@ -9,7 +9,6 @@ require 'erb'
 require 'open-uri'
 require 'nkf'
 require "net/http"
-require "csv"
 
 load "gyazo.rb"
 load "codic.rb"
@@ -419,7 +418,8 @@ get '/codic/api/text' do
 	if !query
 		return ""
 	end
-	NAMING.find_to_string(query)
+	text = NAMING.find_to_string(query)
+	CGI.escapeHTML(text).gsub(/\n/, "<br>")
 end
 
 
