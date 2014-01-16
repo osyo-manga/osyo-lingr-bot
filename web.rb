@@ -412,10 +412,6 @@ end
 # -------------------- codic --------------------
 NAMING = Naming.new("codic")
 
-def request_naming(word)
-	
-end
-
 
 get '/codic/api/text' do
 	query  = params[:query]
