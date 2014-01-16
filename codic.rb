@@ -1,9 +1,10 @@
+# -*- encoding: UTF-8 -*-
 require "CSV"
 
 
 class Entry
 	def initialize(csv_file)
-		@csv = CSV.read(csv_file)
+		@csv = CSV.read(csv_file, :encoding => 'UTF-8')
 	end
 
 	def find_word(word)
@@ -14,7 +15,7 @@ end
 
 class Translation
 	def initialize(csv_file)
-		@csv = CSV.read(csv_file)
+		@csv = CSV.read(csv_file, :encoding => 'UTF-8')
 	end
 
 	def find_id(id)
