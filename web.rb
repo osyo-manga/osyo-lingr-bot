@@ -9,6 +9,7 @@ require 'erb'
 require 'open-uri'
 require 'nkf'
 require "net/http"
+require "CSV"
 
 load "gyazo.rb"
 load "codic.rb"
