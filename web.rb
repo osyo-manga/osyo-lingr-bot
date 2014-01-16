@@ -11,6 +11,7 @@ require 'nkf'
 require "net/http"
 
 load "gyazo.rb"
+load "codic.rb"
 
 
 get '/' do
@@ -337,6 +338,8 @@ output(F func, bool&&)
 ->decltype(output_impl(func(), true)){
 	return output_impl(func(), true);
 }
+syo_manga
+
 
 
 template<typename F>
@@ -403,4 +406,37 @@ get '/wandbox' do
 	return "wandbox"
 end
 
+
+
+
+# -------------------- codic --------------------
+NAMING = Naming.new("codic")
+
+def request_naming(word)
+	
+end
+
+
+get '/codic/api/text' do
+	query  = params[:query]
+	if !query
+		return ""
+	end
+	NAMING.find_to_string(query)
+end
+
+
+post '/codic/lingr' do
+	content_type :text
+	json = JSON.parse(request.body.string)
+	json["events"].select {|e| e['message'] }.map {|e|
+		text = e["message"]["text"]
+		room = e["message"]["room"]
+		
+		if /#codic\s+(.+)/ =~ text
+			return NAMING.find_to_string($1)
+		end
+	}
+	return ""
+end
 
