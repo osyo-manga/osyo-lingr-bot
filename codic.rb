@@ -8,7 +8,7 @@ class Entry
 	end
 
 	def find_word(word)
-		@csv.select { | line | /#{word}/ =~ line[1] }
+		@csv.select { | line | /#{word}/i =~ line[1] }
 	end
 end
 
