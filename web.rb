@@ -410,6 +410,8 @@ end
 
 
 # -------------------- codic --------------------
+# codic   : http://codic.jp/license.html
+# license : http://creativecommons.org/licenses/by-sa/3.0/deed.ja
 NAMING = Naming.new("codic")
 
 
