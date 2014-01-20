@@ -287,6 +287,8 @@ def compile(expr)
 #include <string>
 #include <tuple>
 #include <typeinfo>
+#include <cstdio>
+#include <vector>
 #include <boost/config.hpp>
 
 
@@ -338,8 +340,6 @@ output(F func, bool&&)
 ->decltype(output_impl(func(), true)){
 	return output_impl(func(), true);
 }
-syo_manga
-
 
 
 template<typename F>
