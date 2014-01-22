@@ -9,6 +9,8 @@ require 'erb'
 require 'open-uri'
 require 'nkf'
 require "net/http"
+require 'dalli'
+require 'memcachier'
 
 load "gyazo.rb"
 load "codic.rb"
@@ -146,6 +148,41 @@ def mobamasu_image_rand(search_word, rarity, regexp)
 # 			effect = $2
 		"#{name}\n#{image_url}\n#{rarity_str} ｺｽﾄ:#{cost} " + (skills.nil? ? "" : " ｽｷﾙ:#{skill} 効果:#{effect}")
 	end
+end
+
+def mobamasu_image_rand_from_api(search_word, rarity, regexp)
+	# Get data
+	cachier = Dalli::Client.new
+	idols = cachier.get 'idols'
+	unless idols
+		res = Net::HTTP.get_response URI.parse('http://sckdb.com/api/idols.json')
+		if res.code == '200'
+			idols = JSON.parse(res.body).map{|idol|
+				# to zenkaku
+				idol.name = NKF::nkf('-WwXm0', idol.name)
+			}
+			cachier.set('idols', idols)
+		end
+	end
+	return nil unless idols
+	# apply condition
+	unless rarity.nil?
+		idols.reject!{|idol|
+			idol.rarity != rarity
+		}
+	end
+	unless regexp.nil?
+		idols.select!{|idol|
+			# TODO: match also with skill
+			regexp.match idol.name
+		}
+	end
+	idol = idols.sample
+	return nil unless idol
+	idol.tap{|i|
+		image = "http://125.6.169.35/idolmaster/image_sp/card/l/#{i.image_hash}.jpg"
+		break "#{i.name}\n#{image}\n#{i.idol_type} #{i.rarity} ｺｽﾄ:#{i.cost}\n初期 攻/守: #{i.initial_attack}/#{i.initial_defense}\n最大 攻/守:#{i.max_attack}/#{i.max_defense}"
+	}
 end
 
 def get_mobamasu_image(text, frame = false)
