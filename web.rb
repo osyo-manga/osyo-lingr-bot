@@ -75,7 +75,8 @@ end
 # -------------------- mobamasu --------------------
 def mobamasu_image_rand(search_word, rarity, regexp)
 	if rarity.nil?
-		url = "http://mobile-trade.jp/fun/idolmaster/card.php?t=#{ERB::Util.url_encode search_word}"
+		url = "http://mobile-trade.jp/mobamasu/card?t=#{ERB::Util.url_encode search_word}"
+		puts url
 	else
 		rarities = rarity.split(/,/)
 		rarity_param = rarities.map do |r|
@@ -96,48 +97,54 @@ def mobamasu_image_rand(search_word, rarity, regexp)
 				"1"
 			end
 		end.join('&')
-		url = "http://mobile-trade.jp/fun/idolmaster/card.php?t=#{ERB::Util.url_encode search_word}&#{rarity_param}"
+		url = "http://mobile-trade.jp/mobamasu/card?t=#{ERB::Util.url_encode search_word}&#{rarity_param}"
 	end
 	agent = Mechanize.new
 	agent.get(url)
-	cards = agent.page.search("table.card_search_result_table").to_a
+# 	cards = agent.page.at('div#card').search('h1').to_a
+	cards = agent.page.search("section.card").to_a
 	if cards.empty?
 		return nil
 	end
-	if not regexp.nil?
-		cards = cards.select { |card|
-			name = NKF::nkf('-WwXm0', card.at("tbody tr:first-child td:first-child div a").text)
-			statuses = card.at("tbody tr:nth-of-type(3) td:first-child").text
-			if statuses =~ /ｽｷﾙ:(.*)[\s　]*ｽｷﾙ効果:(.*?)[\s　]*$/
-				skill = NKF::nkf('-WwXm0', $1)
-				regexp.match(name) or regexp.match(skill) or regexp.match(skill[1..-2])
-			else
-				regexp.match(name)
-			end
-		}
-	end
+# 	if not regexp.nil?
+# 		cards = cards.select { |card|
+# 			name = NKF::nkf('-WwXm0', card.at("tbody tr:first-child td:first-child div a").text)
+# 			statuses = card.at("tbody tr:nth-of-type(3) td:first-child").text
+# 			if statuses =~ /ｽｷﾙ:(.*)[\s　]*ｽｷﾙ効果:(.*?)[\s　]*$/
+# 				skill = NKF::nkf('-WwXm0', $1)
+# 				regexp.match(name) or regexp.match(skill) or regexp.match(skill[1..-2])
+# 			else
+# 				regexp.match(name)
+# 			end
+# 		}
+# 	end
 	result = cards[rand(cards.length)]
 	if result.nil?
 		nil
 	else
-		name = result.at("tbody tr:first-child td:first-child div a").text
-		image_url = result.at("tbody tr:nth-of-type(2) td:first-child a").attributes["href"].value
-		rarity_str = result.at("tbody tr:first-child td:first-child div a:last-child").text
-		statuses = result.at("tbody tr:nth-of-type(3) td:first-child").text
-		if statuses =~ /攻:(\d+\/\d+)/
-			str = $1
-		end
-		if statuses =~ /守:(\d+\/\d+)/ or statuses =~ /防:(\d+\/\d+)/
-			con = $1
-		end
-		if statuses =~ /ｺｽﾄ:(\d+)/
-			cost = $1
-		end
-		if statuses =~ /ｽｷﾙ:(.*)[\s　]*ｽｷﾙ効果:(.*?)[\s　]*$/
-			skill = $1
-			effect = $2
-		end
-		"#{name}\n#{image_url}\n#{rarity_str} ｺｽﾄ:#{cost} " + (skill.nil? ? "" : " ｽｷﾙ:#{skill} 効果:#{effect}")
+		name = result.search("a").to_a[1].text.strip
+		rarity_str = result.search("a").to_a[2].text.strip
+		status = result.search("div.one_column_structure")
+		image_url = status.at("div.image").at("a").attributes["href"]
+		cost = status.search("span.value").to_a[1].at("a").text
+		skills = status.at("div.skill")
+		skill = skills && skills.search("span.field").text
+		effect = skills && skills.search("span.value").text
+
+# 		statuses = result.at("tbody tr:nth-of-type(3) td:first-child").text
+# 		if statuses =~ /攻:(\d+\/\d+)/
+# 			str = $1
+# 		end
+# 		if statuses =~ /守:(\d+\/\d+)/ or statuses =~ /防:(\d+\/\d+)/
+# 			con = $1
+# 		end
+# 		if statuses =~ /ｺｽﾄ:(\d+)/
+# 			cost = $1
+# 		end
+# 		if statuses =~ /ｽｷﾙ:(.*)[\s　]*ｽｷﾙ効果:(.*?)[\s　]*$/
+# 			skill = $1
+# 			effect = $2
+		"#{name}\n#{image_url}\n#{rarity_str} ｺｽﾄ:#{cost} " + (skills.nil? ? "" : " ｽｷﾙ:#{skill} 効果:#{effect}")
 	end
 end
 
