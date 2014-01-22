@@ -75,11 +75,11 @@ end
 # -------------------- mobamasu --------------------
 def mobamasu_image_rand(search_word, rarity, regexp)
 	if rarity.nil?
-		url = "http://mobile-trade.jp/fun/idolmaster/card.php?_name=#{ERB::Util.url_encode search_word}"
+		url = "http://mobile-trade.jp/fun/idolmaster/card.php?t=#{ERB::Util.url_encode search_word}"
 	else
 		rarities = rarity.split(/,/)
 		rarity_param = rarities.map do |r|
-			'rarity%5B%5D=' + case r
+			'r%5B%5D=' + case r
 			when 'N'
 				"1"
 			when 'N+'
@@ -96,7 +96,7 @@ def mobamasu_image_rand(search_word, rarity, regexp)
 				"1"
 			end
 		end.join('&')
-		url = "http://mobile-trade.jp/fun/idolmaster/card.php?_name=#{ERB::Util.url_encode search_word}&#{rarity_param}"
+		url = "http://mobile-trade.jp/fun/idolmaster/card.php?t=#{ERB::Util.url_encode search_word}&#{rarity_param}"
 	end
 	agent = Mechanize.new
 	agent.get(url)
