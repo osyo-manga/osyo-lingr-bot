@@ -200,7 +200,8 @@ def get_mobamasu_image(text, frame = false)
 			regexp = Regexp.new(NKF::nkf('-WwXm0', arg[1..-2]))
 		end
 	end
-	result = mobamasu_image_rand(search_word, rarity, regexp)
+	result = mobamasu_image_rand_from_api(search_word, rarity, regexp)
+# 	result = mobamasu_image_rand(search_word, rarity, regexp)
 	if result.nil?
 		return "#{search_word} is not found."
 	else
