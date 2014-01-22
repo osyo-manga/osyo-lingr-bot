@@ -20,7 +20,7 @@ get '/' do
 	"Hello, world"
 end
 
-def post(room, bot, text, key)
+def post_to_lingr(room, bot, text, key)
 		param = {
 		room: room,
 		bot: bot,
@@ -200,7 +200,7 @@ def get_mobamasu_image(text, frame = false)
 			regexp = Regexp.new(NKF::nkf('-WwXm0', arg[1..-2]))
 		end
 	end
-	result = mobamasu_image_rand_from_api(search_word, rarity, regexp)
+	result = mobamasu_image_rand(search_word, rarity, regexp)
 # 	result = mobamasu_image_rand(search_word, rarity, regexp)
 	if result.nil?
 		return "#{search_word} is not found."
@@ -426,7 +426,7 @@ end
 def post_lingr_wandbox(room, code)
 	Thread.start do
 		result = compile(code).gsub("  ", "　")
-		post(room, "wandbox", result, ENV['WANDBOX_BOT_KEY'])
+		post_to_lingr(room, "wandbox", result, ENV['WANDBOX_BOT_KEY'])
 	end
 end
 
@@ -466,7 +466,7 @@ def post_lingr_codic(room, query)
 		if text.empty?
 			text = "Not found."
 		end
-		post(room, "codic", text, ENV['CODIC_BOT_KEY'])
+		post_to_lingr(room, "codic", text, ENV['CODIC_BOT_KEY'])
 	end
 end
 
