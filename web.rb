@@ -328,7 +328,7 @@ load "./wandbox.rb"
 
 def post_lingr_wandbox(room, code)
 	Thread.start do
-		result = Wandbox.compile(code).gsub("  ", "　")[/(.*)\n/m, 1].slice(0, 1000)
+		result = Wandbox.compile(code).gsub("  ", "　").slice(0, 1000)
 		post_to_lingr(room, "wandbox", result, ENV['WANDBOX_BOT_KEY'])
 	end
 end

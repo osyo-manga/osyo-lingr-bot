@@ -98,7 +98,7 @@ EOS
 		http.start do |http|
 			response = http.request(request)
 			result = JSON.parse(response.body)
-			return result["program_output"] ? result["program_output"] : result["compiler_error"]
+			return result["program_output"] ? result["program_output"] : result["compiler_error"][/(.*)\n/m, 1]
 		end
 	end
 	
