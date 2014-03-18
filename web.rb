@@ -352,7 +352,7 @@ post '/wandbox' do
 			return "!wandbox-cpp {expr} で {expr} の結果を返します。\n{expr} には結果が標準出力可能な式、もしくはラムダ式が設定できます\nラムダ式の場合はラムダ式が評価された結果が出力されます"
 		elsif /^!wandbox-cpp[\s　]*(.+)/ =~ text
 			post_lingr_wandbox(room, $1)
-		elsif /^!wandbox-(.+)[\s　]*(.+)/ =~ text
+		elsif /^!wandbox-(\S.+)[\s　]*(.+)/ =~ text
 			post_lingr_wandbox_run(room, $1, $2)
 		end
 	}
