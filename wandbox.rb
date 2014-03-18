@@ -103,5 +103,31 @@ EOS
 	end
 	
 	module_function :compile
+
+	def run(lang, code)
+		body = {
+			"compiler" => lang,
+			"code" => code,
+			"options" => "",
+			"compiler-option-raw" => "",
+		}
+
+		uri = URI.parse("http://melpon.org/wandbox/api/compile.json")
+
+		request = Net::HTTP::Post.new(uri.request_uri, initheader = { "Content-type" => "application/json" },)
+		request.body = body.to_json
+
+		http = Net::HTTP.new(uri.host, uri.port)
+		# http.set_debug_output $stderr
+
+		http.start do |http|
+			response = http.request(request)
+			result = JSON.parse(response.body)
+			(result.has_key? "program_message") ? result["program_message"].chomp : "Not found compiler."
+		end
+	end
+
+	module_function :run
+
 end
 

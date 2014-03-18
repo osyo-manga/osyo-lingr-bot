@@ -333,6 +333,13 @@ def post_lingr_wandbox(room, code)
 	end
 end
 
+def post_lingr_wandbox_run(room, lang, code)
+	Thread.start do
+		result = Wandbox.run(lang, code).gsub("  ", "　").slice(0, 1000)
+		post_to_lingr(room, "wandbox", result, ENV['WANDBOX_BOT_KEY'])
+	end
+end
+
 
 post '/wandbox' do
 	content_type :text
@@ -345,6 +352,8 @@ post '/wandbox' do
 			return "!wandbox-cpp {expr} で {expr} の結果を返します。\n{expr} には結果が標準出力可能な式、もしくはラムダ式が設定できます\nラムダ式の場合はラムダ式が評価された結果が出力されます"
 		elsif /^!wandbox-cpp[\s　]*(.+)/ =~ text
 			post_lingr_wandbox(room, $1)
+		elsif /^!wandbox-(.+)[\s　]*(.+)/ =~ text
+			post_lingr_wandbox_run(room, $1, $2)
 		end
 	}
 	return ""
