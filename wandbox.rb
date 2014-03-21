@@ -129,5 +129,22 @@ EOS
 
 	module_function :run
 
+	def get_from_permlink(permlink)
+		uri = URI.parse "http://melpon.org/wandbox/api/permlink/#{ permlink }"
+
+		request = Net::HTTP::Get.new(uri.path)
+		http = Net::HTTP.new(uri.host, uri.port)
+		http.start do |http|
+			response = http.request(request)
+			result = JSON.parse(response.body)
+		end
+	end
+
+	def get_code(permlink)
+		get_from_permlink(permlink).fetch("parameter", {})["code"]
+	end
+	
+	module_function :get_from_permlink
+	module_function :get_code
 end
 

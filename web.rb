@@ -354,6 +354,8 @@ post '/wandbox' do
 			post_lingr_wandbox(room, $1)
 		elsif /^!wandbox-(\S+)[\s　]*(.+)/ =~ text
 			post_lingr_wandbox_run(room, $1, $2)
+		elsif text =~ /^http:\/\/melpon.org\/wandbox\/permlink\/(\w+)$/
+			return Wandbox.get_code $1
 		end
 	}
 	return ""
