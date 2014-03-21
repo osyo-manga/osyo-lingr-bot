@@ -347,7 +347,8 @@ def post_lingr_wandbox_code(room, permlink)
 		result = Wandbox.get_from_permlink(permlink)
 		result = <<"EOS"
 [code]
-#{result.fetch("parameter", {})["code"]}[output]
+#{result.fetch("parameter", {})["code"].chomp}
+[output]
 #{result.fetch("result", {})["program_message"]}
 EOS
 		result = result.chomp.gsub(/^$/, "　").gsub("	", "　　").gsub("  ", "　").slice(0, 1000)
