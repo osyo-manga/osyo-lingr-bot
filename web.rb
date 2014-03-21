@@ -344,7 +344,7 @@ end
 
 def post_lingr_wandbox_code(room, permlink)
 	Thread.start do
-		result = Wandbox.get_code(permlink).chomp.gsub("	", "　　").gsub("  ", "　").slice(0, 1000)
+		result = Wandbox.get_code(permlink).chomp.gsub(/^$/, "　").gsub("	", "　　").gsub("  ", "　").slice(0, 1000)
 		post_to_lingr(room, "wandbox", result, ENV['WANDBOX_BOT_KEY'])
 	end
 end
