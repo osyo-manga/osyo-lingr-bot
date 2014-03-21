@@ -340,6 +340,13 @@ def post_lingr_wandbox_run(room, lang, code)
 	end
 end
 
+def post_lingr_wandbox_code(room, permlink)
+	Thread.start do
+		retult = Wandbox.get_code(permlink).chomp.gsub("	", "　　").gsub("  ", "　").slice(0, 1000)
+		post_to_lingr(room, "wandbox", result, ENV['WANDBOX_BOT_KEY'])
+	end
+end
+
 
 post '/wandbox' do
 	content_type :text
@@ -355,7 +362,7 @@ post '/wandbox' do
 		elsif /^!wandbox-(\S+)[\s　]*(.+)/ =~ text
 			post_lingr_wandbox_run(room, $1, $2)
 		elsif text =~ /^http:\/\/melpon.org\/wandbox\/permlink\/(\w+)$/
-			return (Wandbox.get_code $1).chomp.gsub("	", "　　").gsub("  ", "　").slice(0, 1000)
+			post_lingr_wandbox_code(room, $1)
 		end
 	}
 	return ""
