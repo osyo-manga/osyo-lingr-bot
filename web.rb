@@ -15,6 +15,8 @@ require 'memcachier'
 load "gyazo.rb"
 load "codic.rb"
 
+$stdout.sync = true
+
 
 get '/' do
 	"Hello, world"
@@ -342,7 +344,9 @@ end
 
 def post_lingr_wandbox_code(room, permlink)
 	Thread.start do
+		puts "post_lingr_wandbox_code"
 		retult = Wandbox.get_code(permlink).chomp.gsub("	", "　　").gsub("  ", "　").slice(0, 1000)
+		puts result
 		post_to_lingr(room, "wandbox", result, ENV['WANDBOX_BOT_KEY'])
 	end
 end
