@@ -370,7 +370,7 @@ post '/wandbox' do
 			post_lingr_wandbox(room, $1)
 		elsif /^!wandbox-(\S+)[\s　]*(.+)/ =~ text
 			post_lingr_wandbox_run(room, $1, $2)
-		elsif text =~ /^http:\/\/melpon.org\/wandbox\/permlink\/(\w+)$/
+		elsif text =~ /^!wandbox(\S+)[\s　]+http:\/\/melpon.org\/wandbox\/permlink\/(\w+)$/
 			post_lingr_wandbox_code(room, $1)
 		end
 	}
