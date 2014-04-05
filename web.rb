@@ -217,9 +217,9 @@ post '/mobamasu' do
 	json = JSON.parse(request.body.string)
 	json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
-		if /^#mobamasu[\s　]+(.+)/ =~ text
+		if /^#mobamasu[\s　]+(.+)/i =~ text
 			return get_mobamasu_image(text, true)
-		elsif /^(#mobamasu_no_frame|#mobamasu!)[\s　]+(.+)/ =~ text
+		elsif /^(#mobamasu_no_frame|#mobamasu!)[\s　]+(.+)/i =~ text
 			return get_mobamasu_image(text)
 		end
 	}
@@ -293,10 +293,10 @@ post '/gyazo' do
 			post_lingr_gyazo(room, text[/^(http:\/\/www\.amazon.+)/, 1], 800, 500)
 # 			post_lingr_gyazo(room, "http://www.amazon.co.jp/" + text[/http:\/\/www\.amazon\.co\.jp\/.*(dp\/[A-Z0-9]+).*/, 1], 800, 500)
 		end
-		if /^#gyazo[\s　]*(http.+)/ =~ text
+		if /^#gyazo[\s　]*(http.+)/i =~ text
 			post_lingr_gyazo(room, text[/^#gyazo[\s　]*(http.+)/, 1], 0, 800)
 		end
-		if /^#image[\s　]*(.+)/ =~ text
+		if /^#image[\s　]*(.+)/i =~ text
 			word = text[/^#image[\s　]*(.+)/, 1].split(/[\s　]/).map {|s| ERB::Util.url_encode s }.join("+")
 			url = "http://www.google.co.jp/search?&q=#{word}&tbm=isch"
 			post_lingr_gyazo(room, url, 0, 800, 140, 110)
@@ -364,11 +364,11 @@ post '/wandbox' do
 		text = e["message"]["text"]
 		room = e["message"]["room"]
 
-		if /^!wandbox-cpp[\s　]*help/ =~ text
+		if /^!wandbox-cpp[\s　]*help/i =~ text
 			return "!wandbox-cpp {expr} で {expr} の結果を返します。\n{expr} には結果が標準出力可能な式、もしくはラムダ式が設定できます\nラムダ式の場合はラムダ式が評価された結果が出力されます"
-		elsif /^!wandbox-cpp[\s　]*(.+)/ =~ text
+		elsif /^!wandbox-cpp[\s　]*(.+)/i =~ text
 			post_lingr_wandbox(room, $1)
-		elsif /^!wandbox-(\S+)[\s　]*(.+)/ =~ text
+		elsif /^!wandbox-(\S+)[\s　]*(.+)/i =~ text
 			post_lingr_wandbox_run(room, $1, $2)
 		elsif text =~ /^!wandbox[\s　]+http:\/\/melpon.org\/wandbox\/permlink\/(\w+)$/
 			post_lingr_wandbox_code(room, $1)
@@ -418,7 +418,7 @@ post '/codic/lingr' do
 		text = e["message"]["text"]
 		room = e["message"]["room"]
 		
-		if /#codic\s+(.+)/ =~ text
+		if /#codic\s+(.+)/i =~ text
 			post_lingr_codic(room, $1)
 		end
 	}
