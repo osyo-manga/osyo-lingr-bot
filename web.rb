@@ -294,10 +294,10 @@ post '/gyazo' do
 # 			post_lingr_gyazo(room, "http://www.amazon.co.jp/" + text[/http:\/\/www\.amazon\.co\.jp\/.*(dp\/[A-Z0-9]+).*/, 1], 800, 500)
 		end
 		if /^#gyazo[\s　]*(http.+)/i =~ text
-			post_lingr_gyazo(room, text[/^#gyazo[\s　]*(http.+)/, 1], 0, 800)
+			post_lingr_gyazo(room, $1, 0, 800)
 		end
 		if /^#image[\s　]*(.+)/i =~ text
-			word = text[/^#image[\s　]*(.+)/, 1].split(/[\s　]/).map {|s| ERB::Util.url_encode s }.join("+")
+			word = $1.split(/[\s　]/).map {|s| ERB::Util.url_encode s }.join("+")
 			url = "http://www.google.co.jp/search?&q=#{word}&tbm=isch"
 			post_lingr_gyazo(room, url, 0, 800, 140, 110)
 		end
