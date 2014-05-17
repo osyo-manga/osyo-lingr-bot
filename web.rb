@@ -348,6 +348,8 @@ def post_lingr_wandbox_code(room, permlink)
 		result = <<"EOS"
 [code]
 #{result.fetch("parameter", {})["code"].chomp}
+[compiler message]
+#{result.fetch("result", {})["compiler_message"]}
 [output]
 #{result.fetch("result", {})["program_message"]}
 EOS
