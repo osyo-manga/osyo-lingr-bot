@@ -294,7 +294,7 @@ post '/gyazo' do
 # 			post_lingr_gyazo(room, "http://www.amazon.co.jp/" + text[/http:\/\/www\.amazon\.co\.jp\/.*(dp\/[A-Z0-9]+).*/, 1], 800, 500)
 		end
 		if /^#gyazo[\s　]*(http.+)/i =~ text
-			post_lingr_gyazo(room, $1, 0, 800)
+			post_lingr_gyazo(room, $1, 800, 800)
 		end
 		if /^#image[\s　]*(.+)/i =~ text
 			word = $1.split(/[\s　]/).map {|s| ERB::Util.url_encode s }.join("+")
