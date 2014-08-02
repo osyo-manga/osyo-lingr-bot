@@ -134,7 +134,7 @@ def mobamasu_image_rand(search_word, rarity, regexp)
 		name = result.search("a").to_a[1].text.strip
 		rarity_str = result.search("a").to_a[2].text.strip
 		status = result.search("div.one_column_structure")
-		image_url = to_mobamasu_image_url status.at("div.image").at("a").attributes["href"]
+		image_url = to_mobamasu_image_url status.at("div.image").at("a").attributes["href"].to_s
 		cost = status.search("span.value").to_a[1].at("a").text
 		skills = status.at("div.skill")
 		skill = skills && skills.search("span.field").text
