@@ -212,7 +212,7 @@ def get_mobamasu_image(text, frame = false)
 	if result.nil?
 		return "#{search_word} is not found."
 	else
-		return frame ? result : result.sub(/%2Fl%2F/, "%2Fl_noframe%2F")
+		return frame ? result : result.sub(/\/l\//, "/l_noframe/")
 	end
 end
 
