@@ -77,6 +77,11 @@ end
 
 
 # -------------------- mobamasu --------------------
+def to_mobamasu_image_url(url)
+	"http://125.6.169.35/idolmaster/image_sp/card/l/#{ url[/%2F(\w+\.jpg)$/, 1]}"
+end
+
+
 def mobamasu_image_rand(search_word, rarity, regexp)
 	if rarity.nil?
 		url = "http://mobile-trade.jp/mobamasu/card?t=#{ERB::Util.url_encode search_word}"
@@ -129,7 +134,7 @@ def mobamasu_image_rand(search_word, rarity, regexp)
 		name = result.search("a").to_a[1].text.strip
 		rarity_str = result.search("a").to_a[2].text.strip
 		status = result.search("div.one_column_structure")
-		image_url = status.at("div.image").at("a").attributes["href"]
+		image_url = to_mobamasu_image_url status.at("div.image").at("a").attributes["href"]
 		cost = status.search("span.value").to_a[1].at("a").text
 		skills = status.at("div.skill")
 		skill = skills && skills.search("span.field").text
