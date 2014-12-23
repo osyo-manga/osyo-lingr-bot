@@ -222,7 +222,7 @@ def post_mobamasu(text)
 	query = Mobamasu.parse_request(text)
 	idol = Mobamasu.search_random query
 	if idol.nil?
-		return ""
+		return "Not found."
 	end
 	"#{idol["Name"]}\n#{Mobamasu.to_image_url(idol["ID"], query[:frame])}"
 end
