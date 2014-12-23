@@ -14,6 +14,7 @@ require 'memcachier'
 
 load "gyazo.rb"
 load "codic.rb"
+load "mobamasu.rb"
 
 $stdout.sync = true
 
@@ -217,16 +218,29 @@ def get_mobamasu_image(text, frame = false)
 end
 
 
+def post_mobamasu(text)
+	query = Mobamasu.parse_request(text)
+	idol = Mobamasu.search_random query
+	if idol.nil?
+		return ""
+	end
+	"#{idol["Name"]}\n#{Mobamasu.to_image_url(idol["ID"], query[:frame])}"
+end
+
+
 post '/mobamasu' do
 	content_type :text
 	json = JSON.parse(request.body.string)
 	json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
 		if /^#mobamasu[\s　]+(.+)/i =~ text
-			return get_mobamasu_image(text, true)
-		elsif /^(#mobamasu_no_frame|#mobamasu!)[\s　]+(.+)/i =~ text
-			return get_mobamasu_image(text)
+			return post_mobamas(text)
 		end
+# 		if /^#mobamasu[\s　]+(.+)/i =~ text
+# 			return get_mobamasu_image(text, true)
+# 		elsif /^(#mobamasu_no_frame|#mobamasu!)[\s　]+(.+)/i =~ text
+# 			return get_mobamasu_image(text)
+# 		end
 	}
 	return ""
 end
