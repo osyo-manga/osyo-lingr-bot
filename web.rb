@@ -233,7 +233,7 @@ post '/mobamasu' do
 	json = JSON.parse(request.body.string)
 	json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
-		if /^#mobamasu[\s　]+(.+)/i =~ text
+		if /^#mobamasu!?[\s　]+(.+)/i =~ text
 			return post_mobamasu(text)
 		end
 # 		if /^#mobamasu[\s　]+(.+)/i =~ text
