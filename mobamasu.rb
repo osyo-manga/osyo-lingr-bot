@@ -2,6 +2,7 @@ require "net/http"
 require "json"
 require "kconv"
 require 'erb'
+require "romaji"
 
 module Mobamasu
 
@@ -88,6 +89,7 @@ module Mobamasu
 			frame = false
 		end
 
+		search_word = Romaji.romaji2kana search_word, :kana_type => :hiragana
 		{ :name => search_word, :rarity => rarity, :frame => frame }
 	end
 
