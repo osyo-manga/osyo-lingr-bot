@@ -89,7 +89,7 @@ module Mobamasu
 			frame = false
 		end
 
-		search_word = Romaji.romaji2kana search_word, :kana_type => :hiragana
+		search_word = Romaji.romaji2kana search_word, :kana_type => :hiragana if search_word =~ /\w/
 		{ :name => search_word, :rarity => rarity, :frame => frame }
 	end
 
