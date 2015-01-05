@@ -20,7 +20,6 @@ module Guraburu
 		}
 	end
 
-
 	def parse_request(request)
 		if request !~ /#guraburu[\s　].*/
 			return nil
