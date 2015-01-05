@@ -33,6 +33,7 @@ module Guraburu
 		{ :name => search_word }
 	end
 
+
 	module_function :search
 	module_function :parse_request
 end
