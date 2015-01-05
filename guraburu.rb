@@ -20,6 +20,7 @@ module Guraburu
 		}
 	end
 
+
 	def parse_request(request)
 		if request !~ /#guraburu[\s　].*/
 			return nil
@@ -33,7 +34,7 @@ module Guraburu
 		{ :name => search_word }
 	end
 
-	module_function :search_images
+	module_function :search
 	module_function :parse_request
 end
 
