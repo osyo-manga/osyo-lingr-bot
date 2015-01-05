@@ -15,6 +15,7 @@ require 'memcachier'
 load "gyazo.rb"
 load "codic.rb"
 load "mobamasu.rb"
+load "guraburu.rb"
 
 $stdout.sync = true
 
@@ -445,4 +446,21 @@ post '/codic/lingr' do
 	}
 	return ""
 end
+
+
+
+post '/guraburu' do
+	content_type :text
+	json = JSON.parse(request.body.string)
+	json["events"].select {|e| e['message'] }.map {|e|
+		text = e["message"]["text"]
+		if /^#guraburu[\s　]+(.+)/i =~ text
+			images = Guraburu.search_images Guraburu.parse_request(text)
+			return images[rand(images.length)]
+		end
+	}
+	return ""
+end
+
+
 
