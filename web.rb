@@ -457,7 +457,7 @@ post '/guraburu' do
 		if /^#guraburu[\s　]+(.+)/i =~ text
 			result = Guraburu.search Guraburu.parse_request(text)
 			images = result[:images]
-			return "#{name}\n#{images[rand(images.length)]}"
+			return "#{result[:name]}\n#{images[rand(images.length)]}"
 		end
 	}
 	return ""
