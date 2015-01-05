@@ -2,7 +2,7 @@ require "mechanize"
 require "romaji"
 
 module Guraburu
-	def	search_images(query)
+	def	search(query)
 		url = "http://blog.livedoor.jp/lucius300/archives/38508851.html"
 
 		agent = Mechanize.new
@@ -12,9 +12,10 @@ module Guraburu
 		table.search("tr").each { |tr|
 			name = ((tr/"td")[1]/:strong).text
 			if name =~ /#{query[:name]}/
-				return (tr/:a)[0,2].map { |a|
+				images = (tr/:a)[0,2].map { |a|
 					a["href"]
 				}
+				return { :images => images, :name => name }
 			end
 		}
 	end

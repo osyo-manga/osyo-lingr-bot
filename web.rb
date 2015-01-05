@@ -455,8 +455,10 @@ post '/guraburu' do
 	json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
 		if /^#guraburu[\s　]+(.+)/i =~ text
-			images = Guraburu.search_images Guraburu.parse_request(text)
-			return images[rand(images.length)]
+			result = Guraburu.search_images Guraburu.parse_request(text)
+			puts result
+			images = result
+			return "#{name}\n#{images[rand(images.length)]}"
 		end
 	}
 	return ""
