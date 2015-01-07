@@ -457,7 +457,13 @@ post '/guraburu' do
 		if /^#guraburu[\s　]+(.+)/i =~ text
 			result = Guraburu.search Guraburu.parse_request(text)
 			result = result[rand(result.length)]
-			return "#{result[:name]}\n#{result[:image]}"
+# 			return "#{result[:name]}\n#{result[:image]}"
+			return <<EOS
+#{result[:image]}
+#{result[:name]}
+CV：#{result["cv"]}
+属性：#{result["属性"]}
+EOS
 		end
 	}
 	return ""

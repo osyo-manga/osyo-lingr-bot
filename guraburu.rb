@@ -15,14 +15,16 @@ module Guraburu
 			((tr/"td")[1]/:strong).text =~ /#{name}/
 		}
 		result.map { |tr|
+			chara = Hash[(tr/"td")[1].inner_html.gsub(/\<strong\>.*\<\/strong\>/, "").gsub(/\<a.*\>.*\<\/a\>/, "").split("<br>").select{ |it| !it.empty? && it.include?('：') }.map { |it| it.split '：' }]
+
 			images = (tr/:a)[0,2].map { |a|
 				a["href"]
 			}
-			{
+			chara.merge({
 				:name => ((tr/"td")[1]/:strong).text,
 				:image => query[:plus] ? images[1] : images[0],
 				:images => images,
-			}
+			})
 		}
 	end
 
