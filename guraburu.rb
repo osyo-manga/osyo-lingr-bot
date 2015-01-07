@@ -1,4 +1,5 @@
 require "mechanize"
+require 'erb'
 require "romaji"
 
 module Guraburu
@@ -16,14 +17,17 @@ module Guraburu
 		}
 		result.map { |tr|
 			chara = Hash[(tr/"td")[1].inner_html.gsub(/\<strong\>.*\<\/strong\>/, "").gsub(/\<a.*\>.*\<\/a\>/, "").split("<br>").select{ |it| !it.empty? && it.include?('：') }.map { |it| it.split '：' }]
+			chara["ランク"] = chara["ランク"].gsub(/レア/, "R")
 
 			images = (tr/:a)[0,2].map { |a|
 				a["href"]
 			}
+			name = ((tr/"td")[1]/:strong).text
 			chara.merge({
-				:name => ((tr/"td")[1]/:strong).text,
+				:name => name,
 				:image => query[:plus] ? images[1] : images[0],
 				:images => images,
+				:wiki_url => "http://gbf-wiki.com/index.php?#{ERB::Util.url_encode((name + " (#{chara["ランク"]})").toeuc)}"
 			})
 		}
 	end
