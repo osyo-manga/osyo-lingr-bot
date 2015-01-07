@@ -459,8 +459,8 @@ post '/guraburu' do
 			result = result[rand(result.length)]
 # 			return "#{result[:name]}\n#{result[:image]}"
 			return <<EOS
-#{result["ランク"]} #{result[:image]}
-#{result[:name]}（CV：#{result["cv"]}）　属性：#{result["属性"]}
+#{result[:image]}
+#{result["ランク"]} #{result[:name]}（CV：#{result["cv"]}）　属性：#{result["属性"]}
 #{result[:wiki_url]}
 EOS
 		end
