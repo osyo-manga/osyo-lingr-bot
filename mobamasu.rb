@@ -94,11 +94,36 @@ module Mobamasu
 	end
 
 
+	def search_loading(query)
+		name = /#{query[:name]}/
+
+		url = "http://imcgcollector.blog.fc2.com/blog-entry-994.html"
+
+		agent = Mechanize.new
+		page = agent.get(url)
+		tables = (page/:table)[5, 16]
+
+		chars = tables.search(:tr).select { |tr|
+			td = tr/:td
+			td[0] && td[0].inner_text =~ name && td[2][:bgcolor] != "#cccccc"
+		}
+
+		chars.map { |it|
+			{
+				:name => (it/:td)[0].inner_text.gsub(/.?[\(（]\d*[\)）].?/, ""),
+				:katagaki  => (it/:a)[1][:href],
+				:loading_icon  => (it/:a)[2][:href]
+			}
+		}
+	end
+
+
 	module_function :parse_request
 	module_function :rarity_to_n
 	module_function :search
 	module_function :search_random
 	module_function :to_image_url
+	module_function :search_loading
 end
 
 

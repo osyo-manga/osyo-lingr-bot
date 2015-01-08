@@ -234,6 +234,13 @@ post '/mobamasu' do
 	json = JSON.parse(request.body.string)
 	json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
+		if /^#mobamasul[\s　]+(.+)/i =~ text
+			charas = search_loading({ :name => text[/^#mobamasul[\s　]+(.+)/, 1] })
+			chara = charas[rand(charas.length)]
+			if chara
+				return chara[:loading_icon]
+			end
+		end
 		if /^#mobamasu!?[\s　]+(.+)/i =~ text
 			return post_mobamasu(text)
 		end
