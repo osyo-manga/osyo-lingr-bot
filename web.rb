@@ -238,7 +238,7 @@ post '/mobamasu' do
 			charas = Mobamasu.search_loading({ :name => text[/^#mobamasul[\s　]+(.+)/, 1] })
 			chara = charas[rand(charas.length)]
 			if chara
-				return "#{chara[:loading_icon]}\n#{chara[:name]}"
+				return "#{chara[:name]}\n#{chara[:loading_icon]}"
 			end
 		end
 		if /^#mobamasu!?[\s　]+(.+)/i =~ text
