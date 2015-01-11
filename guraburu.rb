@@ -47,6 +47,7 @@ module Guraburu
 				:image => (chara/:td)[0].at(:a)[:href],
 				:name => (chara/:td)[1].inner_text,
 				:type => (chara/:td)[2].inner_text,
+				:summon => (chara/:td)[5].inner_text,
 				:bless => (chara/:td)[7].inner_text,
 				:kind => :summon
 			}

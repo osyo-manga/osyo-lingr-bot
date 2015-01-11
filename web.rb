@@ -473,8 +473,8 @@ EOS
 				elsif result[:kind] == :summon
 				return <<EOS
 #{result[:image]}
-#{result[:name]}
-#{result[:type]}：#{result[:bless]}
+#{result[:name]} #{result[:type]}：#{result[:bless]}
+#{result[:summon]}
 EOS
 				end
 
