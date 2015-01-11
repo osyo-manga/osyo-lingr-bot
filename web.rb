@@ -472,8 +472,9 @@ post '/guraburu' do
 EOS
 				elsif result[:kind] == :summon
 				return <<EOS
+#{result[:name]}
+#{result[:type]}：#{result[:bless]}
 #{result[:image]}
-#{result[:name]} #{result[:type]}：#{result[:bless]}
 #{result[:summon]}
 EOS
 				end
