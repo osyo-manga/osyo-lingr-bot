@@ -465,25 +465,20 @@ post '/guraburu' do
 			result = Guraburu.search Guraburu.parse_request(text)
 			result = result[rand(result.length)]
 			if result[:kind] == :chara
-				return <<EOS
+				result = <<EOS
 #{result["ランク"]} #{result[:name]}（CV：#{result["cv"]}）　属性：#{result["属性"]}
 #{result[:image]}
 #{result[:wiki_url]}
 EOS
-				elsif result[:kind] == :summon
-				return <<EOS
+			elsif result[:kind] == :summon
+				result = <<EOS
 #{result[:name]}
 #{result[:type]}：#{result[:bless]}
 #{result[:image]}
 #{result[:summon]}
 EOS
-				end
-
-			return <<EOS
-#{result[:image]}
-#{result["ランク"]} #{result[:name]}（CV：#{result["cv"]}）　属性：#{result["属性"]}
-#{result[:wiki_url]}
-EOS
+			end
+			return result.strip
 		end
 	}
 	return ""
