@@ -1,7 +1,7 @@
 require "mechanize"
 require 'erb'
 require "romaji"
-load "./mobamasu.rb"
+# load "./mobamasu.rb"
 
 
 module Guraburu
