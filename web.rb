@@ -463,7 +463,9 @@ post '/guraburu' do
 		text = e["message"]["text"]
 		if /^#guraburu[\s　]+(.+)/i =~ text
 			result = Guraburu.search Guraburu.parse_request(text)
+			puts result
 			result = result[rand(result.length)]
+			puts result
 			if result[:kind] == :chara
 				result = <<EOS
 #{result[:rank]} #{result[:name]}（CV：#{result[:cv]}）　属性：#{result[:attr]}
