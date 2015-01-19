@@ -60,7 +60,7 @@ module Guraburu
 		end
 		result = scraping_chara_page link
 		result[:image] = query[:plus] ? result[:images][1] : result[:images][0]
-		result
+		[result]
 	end
 
 	def	search_summon(query)
@@ -85,7 +85,7 @@ module Guraburu
 	end
 
 	def search(query)
-		[search_chara(query)] + search_summon(query)
+		search_chara(query) + search_summon(query)
 	end
 
 	def parse_request(request)
