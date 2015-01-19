@@ -466,7 +466,7 @@ post '/guraburu' do
 			result = result[rand(result.length)]
 			if result[:kind] == :chara
 				result = <<EOS
-#{result["ランク"]} #{result[:name]}（CV：#{result["cv"]}）　属性：#{result["属性"]}
+#{result[:rank]} #{result[:name]}（CV：#{result[:cv]}）　属性：#{result[:attr]}
 #{result[:image]}
 #{result[:wiki_url]}
 EOS

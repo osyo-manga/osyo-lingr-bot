@@ -1,36 +1,66 @@
 require "mechanize"
 require 'erb'
 require "romaji"
+load "./mobamasu.rb"
+
 
 module Guraburu
-	def	search_chara(query)
-		name = Romaji.romaji2kana query[:name], :kana_type => :katakana
+	def to_chara_links(name)
+		name = Romaji.romaji2kana Mobamasu.to_fullname(name).sample, :kana_type => :katakana
+		name_r = /#{name}/
 
-		url = "http://blog.livedoor.jp/lucius300/archives/38508851.html"
+		url = "http://gbf-wiki.com/index.php?%BF%CD%CA%AA%B5%D5%B0%FA%A4%AD%B0%EC%CD%F7"
 
 		agent = Mechanize.new
 		page = agent.get(url)
-		table = page/:table
+		page.body = page.body.toutf8
+		page.encoding = 'UTF-8'
+		
+		td = (page/:tbody)[1]/:td
+		td.map { |it| it/:a }.flatten.select { |it| it.inner_text =~ name_r }.map { |it| it[:href] }
+	end
 
-		result = table.search("tr").select { |tr|
-			((tr/"td")[1]/:strong).text =~ /#{name}/
-		}
-		result.map { |tr|
-			chara = Hash[(tr/"td")[1].inner_html.gsub(/\<strong\>.*\<\/strong\>/, "").gsub(/\<a.*\>.*\<\/a\>/, "").split("<br>").select{ |it| !it.empty? && it.include?('：') }.map { |it| it.split '：' }]
-			chara["ランク"] = chara["ランク"].gsub(/レア/, "R")
 
-			images = (tr/:a)[0,2].map { |a|
-				a["href"]
-			}
-			name = ((tr/"td")[1]/:strong).text
-			chara.merge({
-				:name => name,
-				:image => query[:plus] ? images[1] : images[0],
-				:images => images,
-				:wiki_url => "http://gbf-wiki.com/index.php?#{ERB::Util.url_encode((name + " (#{chara["ランク"]})").toeuc)}",
-				:kind => :chara,
-			})
+	def scraping_chara_page_impl(url)
+
+		agent = Mechanize.new
+		page = agent.get(url)
+		page.body = page.body.toutf8
+		page.encoding = 'UTF-8'
+
+		data = (page.search(:tbody)[0]/:td)
+		{
+			:name  => data[0].inner_text,
+			:name2 => data[1].inner_text,
+			:images => [data[2].at(:a)[:href], data[3].at(:a)[:href]],
+			:wiki_url => url,
+			:kind => :chara,
+			:rank  => data[9].inner_text,
+			:attr  => data[10].inner_text,
+			:type  => data[11].inner_text,
+			:cv  => data[21].inner_text,
 		}
+	# 	puts page.search('//*[@id="content_1_1"]')
+	end
+
+	def clear_cache
+		@cache = {}
+	end
+
+	def scraping_chara_page(url)
+		@cache ||= clear_cache()
+		@cache[url] ||= scraping_chara_page_impl(url)
+	end
+
+
+	def search_chara(query)
+		link = to_chara_links(query[:search_word]).sample
+		if link.nil?
+			return []
+		end
+		result = scraping_chara_page link
+		result[:image] = query[:plus] ? result[:images][1] : result[:images][0]
+		result
 	end
 
 	def	search_summon(query)
@@ -41,7 +71,7 @@ module Guraburu
 		page.body = page.body.toutf8
 		page.encoding = 'UTF-8'
 		summons = (page/:tr)[1..-1].select { |tr|
-			(tr/:td)[1].inner_text =~ /#{query[:name]}/
+			(tr/:td)[1].inner_text =~ /#{query[:search_word]}/
 		}.map { |chara|
 			{
 				:image => (chara/:td)[0].at(:a)[:href],
@@ -55,7 +85,7 @@ module Guraburu
 	end
 
 	def search(query)
-		search_chara(query) + search_summon(query)
+		[search_chara(query)] + search_summon(query)
 	end
 
 	def parse_request(request)
@@ -70,11 +100,16 @@ module Guraburu
 		plus = !!(search_word =~ /\+$/)
 		search_word = search_word.gsub(/\+$/, "")
 
-		search_word = Romaji.romaji2kana search_word, :kana_type => :katakana
-		{ :name => search_word, :plus => plus }
+# 		search_word = search_word
+# 		search_word = Romaji.romaji2kana search_word, :kana_type => :katakana
+		{ :search_word => search_word, :plus => plus }
 	end
 
 
+	module_function :to_chara_links
+	module_function :scraping_chara_page_impl
+	module_function :scraping_chara_page
+	module_function :clear_cache
 	module_function :search_summon
 	module_function :search_chara
 	module_function :search

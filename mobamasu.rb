@@ -3585,10 +3585,10 @@ CHARACTER_LIST = [
 
 	def to_fullname(name)
 		name = Romaji.romaji2kana name, :kana_type => :hiragana if name =~ /\w/
-		name = /#{name}/
+		name_r = /#{name}/
 		
 		result = CHARACTER_LIST.select { |chara|
-			chara["name_ruby"] =~ name
+			chara["name_ruby"] =~ name_r
 		}.map { |it| it["name"] }
 		result.empty? ? [name] : result
 	end
