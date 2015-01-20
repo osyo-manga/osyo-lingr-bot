@@ -3689,19 +3689,27 @@ CHARACTER_LIST = [
 
 		agent = Mechanize.new
 		page = agent.get(url)
-		tables = (page/:table)[5, 16]
+		tables = (page/:table)[5, 17]
 
 		chars = tables.search(:tr).select { |tr|
 			td = tr/:td
-			td[0] && td[0].inner_text =~ name && td[2][:bgcolor] != "#cccccc"
+			(td[0] && td[0].inner_text =~ name && td[2][:bgcolor] != "#cccccc") || (td[1] && td[1].inner_text =~ name && td[3][:bgcolor] != "#cccccc")
 		}
 
 		chars.map { |it|
-			{
-				:name => (it/:td)[0].inner_text.gsub(/.?[\(（]\d*[\)）].?/, ""),
-				:katagaki  => (it/:a)[1][:href],
-				:loading_icon  => (it/:a)[2][:href]
-			}
+			if (it/:td)[0].inner_text == "◆"
+				{
+					:name => (it/:td)[1].inner_text.gsub(/.?[\(（]\d*[\)）].?/, ""),
+					:katagaki  => (it/:a)[2][:href],
+					:loading_icon  => (it/:a)[3][:href]
+				}
+			else
+				{
+					:name => (it/:td)[0].inner_text.gsub(/.?[\(（]\d*[\)）].?/, ""),
+					:katagaki  => (it/:a)[1][:href],
+					:loading_icon  => (it/:a)[2][:href]
+				}
+			end
 		}
 	end
 
