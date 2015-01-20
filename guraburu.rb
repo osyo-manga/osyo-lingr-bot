@@ -22,10 +22,16 @@ module Guraburu
 
 
 	def scraping_chara_page_impl(url)
+		url = URI(url)
+		puts url.fragment
 
 		agent = Mechanize.new
 		page = agent.get(url)
+
 		page.body = page.body.toutf8
+
+		page.body = Mechanize::Util.html_unescape(page.body).split(page.at("//*[@id=\"#{url.fragment}\"]").to_s)[1] if url.fragment
+
 		page.encoding = 'UTF-8'
 
 		data = page.at(:tbody)/:td
