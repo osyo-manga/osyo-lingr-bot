@@ -3698,7 +3698,7 @@ CHARACTER_LIST = [
 
 		chars.map { |it|
 			name = (it/:td)[0].inner_text
-			name = (it/:td)[1].inner_text if name == "◆"
+			name = (it/:td)[1].inner_text if name =~ /^[★◆]$/
 			{
 				:name => name.gsub(/.?[\(（]\d*[\)）].?/, ""),
 				:katagaki  => (it/:a)[1][:href],
