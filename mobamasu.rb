@@ -3697,19 +3697,13 @@ CHARACTER_LIST = [
 		}
 
 		chars.map { |it|
-			if (it/:td)[0].inner_text == "◆"
-				{
-					:name => (it/:td)[1].inner_text.gsub(/.?[\(（]\d*[\)）].?/, ""),
-					:katagaki  => (it/:a)[2][:href],
-					:loading_icon  => (it/:a)[3][:href]
-				}
-			else
-				{
-					:name => (it/:td)[0].inner_text.gsub(/.?[\(（]\d*[\)）].?/, ""),
-					:katagaki  => (it/:a)[1][:href],
-					:loading_icon  => (it/:a)[2][:href]
-				}
-			end
+			name = (it/:td)[0].inner_text
+			name = (it/:td)[1].inner_text if name == "◆"
+			{
+				:name => name.gsub(/.?[\(（]\d*[\)）].?/, ""),
+				:katagaki  => (it/:a)[1][:href],
+				:loading_icon  => (it/:a)[2][:href]
+			}
 		}
 	end
 
