@@ -28,19 +28,19 @@ module Guraburu
 		page.body = page.body.toutf8
 		page.encoding = 'UTF-8'
 
-		data = (page.search(:tbody)[0]/:td)
+		data = page.at(:tbody)/:td
+		images =  (data/:img).map { |it| it[:src] }
 		{
 			:name  => data[0].inner_text,
 			:name2 => data[1].inner_text,
-			:images => [data[2].at(:a)[:href], data[3].at(:a)[:href]],
+			:images => images,
 			:wiki_url => url,
 			:kind => :chara,
-			:rank  => data[9].inner_text,
-			:attr  => data[10].inner_text,
-			:type  => data[11].inner_text,
-			:cv  => data[21].inner_text,
+			:rank  => data[images.size + 7].inner_text,
+			:attr  => data[images.size + 8].inner_text,
+			:type  => data[images.size + 9].inner_text,
+			:cv  => data[images.size + 19].inner_text,
 		}
-	# 	puts page.search('//*[@id="content_1_1"]')
 	end
 
 	def clear_cache
