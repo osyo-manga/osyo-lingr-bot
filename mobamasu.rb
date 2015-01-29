@@ -3621,6 +3621,9 @@ CHARACTER_LIST = [
 		end
 
 		idols = result["data"]
+		if query[:regexp]
+			idols.select! { |it| it["Name"] =~ query[:regexp] }
+		end
 		if query[:rarity] == nil
 			return idols
 		end
@@ -3667,9 +3670,14 @@ CHARACTER_LIST = [
 		end
 
 		rarity = nil
+		regexp = nil
+		puts args
 		args.each do |arg|
 			if arg =~ /^(N|N\+|R|R\+|SR|SR\+)(,(N|N\+|R|R\+|SR|SR\+))*$/
 				rarity = arg
+			end
+			if arg =~ /^\/.*\/$/
+				regexp = Regexp.new(NKF::nkf('-WwXm0', arg[1..-2]))
 			end
 		end
 		frame = true
@@ -3678,7 +3686,7 @@ CHARACTER_LIST = [
 		end
 
 		search_word = Romaji.romaji2kana search_word, :kana_type => :hiragana if search_word =~ /\w/
-		{ :name => search_word, :rarity => rarity, :frame => frame }
+		{ :name => search_word, :rarity => rarity, :frame => frame, :regexp => regexp }
 	end
 
 
