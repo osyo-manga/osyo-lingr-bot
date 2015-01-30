@@ -244,6 +244,15 @@ post '/mobamasu' do
 		if /^#mobamasu!?[\s　]+(.+)/i =~ text
 			return post_mobamasu(text)
 		end
+
+		if /^#mobamasu!?[\s　]+(.+)/i =~ text
+			return post_mobamasu(text)
+		end
+
+		if /^#mobamasu_music?[\s　]+(.+)/i =~ text
+			result = Mobamasu.search_music($1).first
+			return result ? result["previewUrl"] : "Not found #{$1}"
+		end
 # 		if /^#mobamasu[\s　]+(.+)/i =~ text
 # 			return get_mobamasu_image(text, true)
 # 		elsif /^(#mobamasu_no_frame|#mobamasu!)[\s　]+(.+)/i =~ text

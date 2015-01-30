@@ -3661,7 +3661,7 @@ CHARACTER_LIST = [
 	end
 
 	def parse_request(request)
-		if request !~ /#mobamasu!?[\s　].*/
+		if request !~ /#mobamasul?!?[\s　].*/
 			return nil
 		end
 		(op, search_word, *args) = request.split(/[\s　]+/, 4)
@@ -3715,6 +3715,14 @@ CHARACTER_LIST = [
 		}
 	end
 
+	def search_music name
+		puts to_fullname(name)
+		name = /#{to_fullname(name).first}/
+		term = "IDOLM@STER CINDERELLA"
+		response = Net::HTTP.get "ax.itunes.apple.com", "/WebObjects/MZStoreServices.woa/wa/wsSearch?term=#{ERB::Util.url_encode term}&country=JP&entity=musicTrack"
+		JSON.parse(response)["results"].select { |it| it["artistName"] =~ name }
+	end
+
 	module_function :parse_request
 	module_function :rarity_to_n
 	module_function :search
@@ -3722,6 +3730,7 @@ CHARACTER_LIST = [
 	module_function :to_image_url
 	module_function :search_loading
 	module_function :to_fullname
+	module_function :search_music
 end
 
 
