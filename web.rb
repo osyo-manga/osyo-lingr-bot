@@ -235,7 +235,7 @@ post '/mobamasu' do
 	json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
 		if /^#mobamasul[\s　]+(.+)/i =~ text
-			charas = Mobamasu.search_loading( Mobamasu.parse_request text).sample
+			chara = Mobamasu.search_loading( Mobamasu.parse_request text).sample
 			if chara
 				return "#{chara[:name]}\n#{chara[:loading_icon]}"
 			else
