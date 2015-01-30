@@ -235,10 +235,11 @@ post '/mobamasu' do
 	json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
 		if /^#mobamasul[\s　]+(.+)/i =~ text
-			charas = Mobamasu.search_loading({ :name => Mobamasu.to_fullname(text[/^#mobamasul[\s　]+(.+)/, 1]).sample })
-			chara = charas[rand(charas.length)]
+			charas = Mobamasu.search_loading( Mobamasu.parse_request text).sample
 			if chara
 				return "#{chara[:name]}\n#{chara[:loading_icon]}"
+			else
+				return "Not found."
 			end
 		end
 		if /^#mobamasu!?[\s　]+(.+)/i =~ text

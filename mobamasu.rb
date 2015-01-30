@@ -3660,8 +3660,8 @@ CHARACTER_LIST = [
 		to_mobamasu_image_url(idol["ID"], query[:frame])
 	end
 
-	def parse_request(request)
-		if request !~ /#mobamasul?!?[\s　].*/
+	def parse_request(request, prefix = "#mobamasul?!?")
+		if request !~ /#{prefix}[\s　].*/
 			return nil
 		end
 		(op, search_word, *args) = request.split(/[\s　]+/, 4)
@@ -3671,7 +3671,6 @@ CHARACTER_LIST = [
 
 		rarity = nil
 		regexp = nil
-		puts args
 		args.each do |arg|
 			if arg =~ /^(N|N\+|R|R\+|SR|SR\+)(,(N|N\+|R|R\+|SR|SR\+))*$/
 				rarity = arg
@@ -3691,7 +3690,7 @@ CHARACTER_LIST = [
 
 
 	def search_loading(query)
-		name = /#{query[:name]}/
+		names = Mobamasu.to_fullname query[:name]
 
 		url = "http://imcgcollector.blog.fc2.com/blog-entry-994.html"
 
@@ -3701,10 +3700,11 @@ CHARACTER_LIST = [
 
 		chars = tables.search(:tr).select { |tr|
 			td = tr/:td
-			(td[0] && td[0].inner_text =~ name && td[2][:bgcolor] != "#cccccc") || (td[1] && td[1].inner_text =~ name && td[3][:bgcolor] != "#cccccc")
+			   (td[0] && names.find { |it| td[0].inner_text =~ /#{it}/ } && td[2][:bgcolor] != "#cccccc")	\
+			|| (td[1] && names.find { |it| td[1].inner_text =~ /#{it}/ } && td[3][:bgcolor] != "#cccccc")
 		}
 
-		chars.map { |it|
+		chars.map! { |it|
 			name = (it/:td)[0].inner_text
 			name = (it/:td)[1].inner_text if name =~ /^[★◆]$/
 			{
@@ -3713,10 +3713,14 @@ CHARACTER_LIST = [
 				:loading_icon  => (it/:a)[2][:href]
 			}
 		}
+		if query[:regexp]
+			chars.select { |it| it[:name] =~ query[:regexp] }
+		else
+			chars
+		end
 	end
 
 	def search_music name
-		puts to_fullname(name)
 		name = /#{to_fullname(name).first}/
 		term = "IDOLM@STER CINDERELLA"
 		response = Net::HTTP.get "ax.itunes.apple.com", "/WebObjects/MZStoreServices.woa/wa/wsSearch?term=#{ERB::Util.url_encode term}&country=JP&entity=musicTrack"
