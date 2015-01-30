@@ -251,7 +251,7 @@ post '/mobamasu' do
 
 		if /^#mobamasu_music?[\s　]+(.+)/i =~ text
 			result = Mobamasu.search_music($1).first
-			return result ? result["previewUrl"] : "Not found #{$1}"
+			return result ? "#{result['trackName']} - #{result['artistName']}\n#{result['previewUrl']}" : "Not found #{$1}"
 		end
 # 		if /^#mobamasu[\s　]+(.+)/i =~ text
 # 			return get_mobamasu_image(text, true)
