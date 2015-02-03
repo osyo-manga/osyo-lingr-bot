@@ -3623,7 +3623,8 @@ CHARACTER_LIST = [
 
 		idols = result["data"]
 		if query[:regexp]
-			idols.select! { |it| it["Name"] =~ query[:regexp] }
+			regexp = /#{NKF.nkf("-w -x -Z4", Romaji.romaji2kana(query[:regexp].source))}/
+			idols.select! { |it| it["Name"] =~ regexp }
 		end
 		if query[:rarity] == nil
 			return idols
@@ -3715,7 +3716,8 @@ CHARACTER_LIST = [
 			}
 		}
 		if query[:regexp]
-			chars.select { |it| it[:name] =~ query[:regexp] }
+			regexp = /#{NKF.nkf("-w -x -Z4", Romaji.romaji2kana(query[:regexp].source))}/
+			chars.select { |it| it[:name] =~ regexp }
 		else
 			chars
 		end
