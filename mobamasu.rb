@@ -3720,11 +3720,11 @@ CHARACTER_LIST = [
 		end
 	end
 
-	def search_music name
-		name = /#{to_fullname(name).first}/
+	def search_music query
+		query = /#{to_fullname(query).first}/
 		term = "IDOLM@STER CINDERELLA"
 		response = Net::HTTP.get "ax.itunes.apple.com", "/WebObjects/MZStoreServices.woa/wa/wsSearch?term=#{ERB::Util.url_encode term}&country=JP&entity=musicTrack"
-		JSON.parse(response)["results"].select { |it| it["artistName"] =~ name }
+		JSON.parse(response)["results"].select { |it| it["artistName"] =~ query || it["trackName"] =~ query }
 	end
 
 	module_function :parse_request
