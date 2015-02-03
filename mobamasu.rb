@@ -4,6 +4,7 @@ require "kconv"
 require 'erb'
 require "mechanize"
 require "romaji"
+require "nkf"
 
 module Mobamasu
 
@@ -3690,7 +3691,7 @@ CHARACTER_LIST = [
 
 
 	def search_loading(query)
-		names = Mobamasu.to_fullname query[:name]
+		names = Mobamasu.to_fullname(query[:name]).map { |it| NKF.nkf("-w -x -Z4", it) }
 
 		url = "http://imcgcollector.blog.fc2.com/blog-entry-994.html"
 
