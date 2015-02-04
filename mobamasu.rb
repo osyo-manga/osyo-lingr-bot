@@ -3738,6 +3738,73 @@ CHARACTER_LIST = [
 	module_function :search_loading
 	module_function :to_fullname
 	module_function :search_music
+
+
+
+	def search_kumajet_by_matome_page url, query
+		page = Mechanize.new.get(url)
+		titles = page.at(".ently_text").text[/^.*\n(.*)\n/, 1].scan(/第\d+話【.+?】/)
+		title = titles.find { |it| it =~ /#{query}/ }
+		if title.nil?
+			return
+		end
+		number = title[/^第(\d+)話/, 1]
+		{
+			title: title,
+			image: page.link_with(:href => /c\/g\/g\/cggekijo\/#{number}\.jpg/).href
+		}
+	end
+
+
+	def search_kumajet_by_backnumber query
+		if query !~ /(\d+)|%(第?(\d+)話)/
+			return
+		end
+		backnumber = $1
+		backnumberp = /第#{backnumber.to_i / 10 * 10 + 1}/
+		page = Mechanize.new.get("http://cggekijo.blog.fc2.com/")
+		result = (page.search(".plugin2_outline")[1]/:a).find { |it| it.inner_text =~ backnumberp }
+		if result
+			search_kumajet_by_matome_page result[:href], backnumber
+		end
+	end
+
+
+	def search_kumajet_by_title query
+		url = "http://cggekijo.blog.fc2.com/?q=#{ERB::Util.url_encode query}"
+		agent = Mechanize.new
+		page = agent.get(url)
+
+		queryp = /#{query}/
+		entlys = page.search(".ently_outline")
+		if entlys.empty?
+			return
+		end
+
+		result = entlys.find { |it| it.at(".ently_title").inner_text =~ queryp }
+		if result
+			ently = result
+			return {
+				title: ently.at(".ently_title").inner_text[/シンデレラガールズ劇場\s+(.*)/, 1],
+				image: ently.at(:img)[:src]
+			}
+		end
+		
+		result = entlys.find { |it| it.at(".ently_title").inner_text =~ /まとめ/ }
+		if result
+			return search_kumajet_by_matome_page result.at(:a)[:href], query
+		end
+	end
+
+	def search_kumajet query
+		if query =~ /(\d+)|%(第?(\d+)話)/
+			search_kumajet_by_backnumber query
+		else
+			search_kumajet_by_title query
+		end
+	end
+
+	module_function :search_kumajet, :search_kumajet_by_title, :search_kumajet_by_backnumber, :search_kumajet_by_matome_page
 end
 
 

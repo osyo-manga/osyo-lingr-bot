@@ -254,6 +254,12 @@ post '/mobamasu' do
 			result = Mobamasu.search_music($1).first
 			return result ? "#{result['trackName']} - #{result['artistName']}\n#{result['previewUrl']}" : "Not found #{$1}"
 		end
+
+		if /^#kumajet?[\s　]+(.+)/i =~ text
+			result = Mobamasu.search_kumajet $1
+			result ? "#{result[:title]}\n#{result[:image]}" : "Not found #{$1}"
+		end
+
 # 		if /^#mobamasu[\s　]+(.+)/i =~ text
 # 			return get_mobamasu_image(text, true)
 # 		elsif /^(#mobamasu_no_frame|#mobamasu!)[\s　]+(.+)/i =~ text
