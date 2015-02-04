@@ -3817,7 +3817,8 @@ CHARACTER_LIST = [
 		id = result[:href][/#(id_\w+)/, 1]
 		{
 			title: result.inner_text,
-			body: page.at("##{id} + div").inner_text
+			body: page.at("##{id} + div").inner_text,
+			link: result[:href]
 		}
 	end
 
