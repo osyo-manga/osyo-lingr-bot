@@ -257,7 +257,7 @@ post '/mobamasu' do
 
 		if /^#kumajet?[\s　]+(.+)/i =~ text
 			result = Mobamasu.search_kumajet $1
-			result ? "#{result[:title]}\n#{result[:image]}" : "Not found #{$1}"
+			return result ? "#{result[:title]}\n#{result[:image]}" : "Not found #{$1}"
 		end
 
 # 		if /^#mobamasu[\s　]+(.+)/i =~ text
