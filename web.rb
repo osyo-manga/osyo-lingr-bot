@@ -258,6 +258,8 @@ post '/mobamasu' do
 
 		if /^#mobamasu_yougo[\s　]+(.+)/i =~ text
 			result = Mobamasu.search_yougo $1
+			puts "mobamsu_yougo"
+			p result
 			return result ? "・#{result[:title]}\n#{result[:body]}" : "Not found #{$1}"
 		end
 
