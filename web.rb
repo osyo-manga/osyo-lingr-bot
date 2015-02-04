@@ -260,7 +260,8 @@ post '/mobamasu' do
 			result = Mobamasu.search_yougo $1
 			puts "mobamsu_yougo"
 			p result
-			return result ? "・#{result[:title]}\n#{result[:body]}" : "Not found #{$1}"
+			return result[:title]
+# 			return result ? "・#{result[:title]}\n#{result[:body]}" : "Not found #{$1}"
 		end
 
 # 		if /^#mobamasu[\s　]+(.+)/i =~ text
