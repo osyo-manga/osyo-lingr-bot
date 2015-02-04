@@ -256,6 +256,11 @@ post '/mobamasu' do
 			return result ? "#{result[:title]}\n#{result[:image]}" : "Not found #{$1}"
 		end
 
+		if /^#mobamasu_yougo[\s　]+(.+)/i =~ text
+			result = Mobamasu.search_yougo $1
+			return result ? "・#{result[:title]}\n#{result[:body]}" : "Not found #{$1}"
+		end
+
 # 		if /^#mobamasu[\s　]+(.+)/i =~ text
 # 			return get_mobamasu_image(text, true)
 # 		elsif /^(#mobamasu_no_frame|#mobamasu!)[\s　]+(.+)/i =~ text
