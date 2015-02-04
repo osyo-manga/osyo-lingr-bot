@@ -246,16 +246,12 @@ post '/mobamasu' do
 			return post_mobamasu(text)
 		end
 
-		if /^#mobamasu!?[\s　]+(.+)/i =~ text
-			return post_mobamasu(text)
-		end
-
-		if /^#mobamasu_music?[\s　]+(.+)/i =~ text
+		if /^#mobamasu_music[\s　]+(.+)/i =~ text
 			result = Mobamasu.search_music($1).first
 			return result ? "#{result['trackName']} - #{result['artistName']}\n#{result['previewUrl']}" : "Not found #{$1}"
 		end
 
-		if /^#%(kumajet)|%(gekizyo)?[\s　]+(.+)/i =~ text
+		if /^#(?:kumajet|gekizyo)[\s　]+(.+)/i =~ text
 			result = Mobamasu.search_kumajet $1
 			return result ? "#{result[:title]}\n#{result[:image]}" : "Not found #{$1}"
 		end
