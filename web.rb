@@ -258,8 +258,7 @@ post '/mobamasu' do
 
 		if /^#mobamasu_yougo[\s　]+(.+)/i =~ text
 			result = Mobamasu.search_yougo $1
-			return "・#{result[:title]}\n#{result[:body]}"
-# 			return result ? "・#{result[:title]}\n#{result[:body]}" : "Not found #{$1}"
+			return result ? "・#{result[:title]}#{result[:body].gsub(/\n\n/, "\n")}" : "Not found #{$1}"
 		end
 
 # 		if /^#mobamasu[\s　]+(.+)/i =~ text
