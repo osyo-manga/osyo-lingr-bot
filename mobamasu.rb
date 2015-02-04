@@ -3807,7 +3807,7 @@ CHARACTER_LIST = [
 	module_function :search_kumajet, :search_kumajet_by_title, :search_kumajet_by_backnumber, :search_kumajet_by_matome_page
 
 
-	def search_mobamasu_yougo query
+	def search_yougo query
 		url = "http://www18.atwiki.jp/imas_cg/pages/119.html"
 		page = Mechanize.new.get(url)
 		result = (page.at(".plugin_contents")/:a).find { |it| it.inner_text =~ /#{query}/ }
