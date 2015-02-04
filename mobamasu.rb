@@ -3810,9 +3810,13 @@ CHARACTER_LIST = [
 	def search_yougo query
 		url = "http://www18.atwiki.jp/imas_cg/pages/119.html"
 		page = Mechanize.new.get(url)
-		result = (page.at(".plugin_contents")/:a).find { |it| it.inner_text =~ /#{query}/ }
+		index = (page.at(".plugin_contents")/:a)
+		result = index.find { |it| it.inner_text == query }
 		if result.nil?
-			return
+			result = index.find { |it| it.inner_text =~ /#{query}/ }
+			if result.nil?
+				return
+			end
 		end
 		id = result[:href][/#(id_\w+)/, 1]
 		{
