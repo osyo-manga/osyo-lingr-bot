@@ -16,7 +16,7 @@ module Guraburu
 		page.body = page.body.toutf8
 		page.encoding = 'UTF-8'
 		
-		td = (page/:tbody)[1]/:td
+		td = (page/:tbody)[0]/:td
 		td.map { |it| it/:a }.flatten.select { |it| it.inner_text =~ name_r }.map { |it| it[:href] }
 	end
 
@@ -61,6 +61,7 @@ module Guraburu
 
 	def search_chara(query)
 		link = to_chara_links(query[:search_word]).sample
+		puts link
 		if link.nil?
 			return []
 		end
