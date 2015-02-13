@@ -3762,11 +3762,9 @@ CHARACTER_LIST = [
 		end
 		backnumber = $1
 		backnumberp = /第#{(backnumber.to_i - 1) / 10 * 10 + 1}/
-		puts backnumberp
 		page = Mechanize.new.get("http://cggekijo.blog.fc2.com/")
 		result = (page.search(".plugin2_outline")[1]/:a).find { |it| it.inner_text =~ backnumberp }
 		if result
-			puts result
 			search_kumajet_by_matome_page result[:href], backnumber
 		end
 	end
