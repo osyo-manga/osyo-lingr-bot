@@ -3798,7 +3798,7 @@ CHARACTER_LIST = [
 
 	def search_kumajet *args
 		query = args[0]
-		if query.nil?
+		if query.nil? || query.empty?
 			search_kumajet_by_backnumber (1..461).to_a.sample.to_s
 		elsif query =~ /(\d+)|%(第?(\d+)話)/
 			search_kumajet_by_backnumber query
