@@ -16,13 +16,14 @@ module Guraburu
 		page.body = page.body.toutf8
 		page.encoding = 'UTF-8'
 		
-		td = (page/:tbody)[0]/:td
+		td = (page/:tbody)[1]/:td
 		td.map { |it| it/:a }.flatten.select { |it| it.inner_text =~ name_r }.map { |it| it[:href] }
 	end
 
 
 	def scraping_chara_page_impl(url)
 		url = URI(url)
+		puts url
 		puts url.fragment
 
 		agent = Mechanize.new
