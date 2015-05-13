@@ -234,17 +234,17 @@ post '/mobamasu' do
 	json = JSON.parse(request.body.string)
 	json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
-		if /^#mobamasul[\s　]+(.+)/i =~ text
-			chara = Mobamasu.search_loading( Mobamasu.parse_request text).sample
-			if chara
-				return "#{chara[:name]}\n#{chara[:loading_icon]}"
-			else
-				return "Not found."
-			end
-		end
-		if /^#mobamasu!?[\s　]+(.+)/i =~ text
-			return post_mobamasu(text)
-		end
+# 		if /^#mobamasul[\s　]+(.+)/i =~ text
+# 			chara = Mobamasu.search_loading( Mobamasu.parse_request text).sample
+# 			if chara
+# 				return "#{chara[:name]}\n#{chara[:loading_icon]}"
+# 			else
+# 				return "Not found."
+# 			end
+# 		end
+# 		if /^#mobamasu!?[\s　]+(.+)/i =~ text
+# 			return post_mobamasu(text)
+# 		end
 
 		if /^#mobamasu_music[\s　]+(.+)/i =~ text
 			result = Mobamasu.search_music($1).first
