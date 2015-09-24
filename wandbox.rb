@@ -85,7 +85,7 @@ EOS
 			"code" => code,
 			"options" => "c++1y,boost-1.55,warning",
 			"compiler" => "clang-head",
-			"compiler-option-raw" => "fno-color-diagnostics",
+			"compiler-option-raw" => "-fno-color-diagnostics",
 		}
 
 		uri = URI.parse("http://melpon.org/wandbox/api/compile.json")
