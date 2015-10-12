@@ -511,6 +511,7 @@ end
 
 post '/slacktest' do
 	text = params.fetch("text").strip
+	"result: #{text}"
 # 	case text
 # 	when "when"
 # 	end
