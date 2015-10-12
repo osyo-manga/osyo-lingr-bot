@@ -520,18 +520,19 @@ end
 post '/slack-wandbox' do
 	text = params.fetch("text").strip
 	p "text: #{text}"
-	if /^@wandbox[\s　]*help/i =~ text
+	result = if /^@wandbox[\s　]*help/i =~ text
 		<<EOS
-!wandbox {expr} で {expr} の結果を返します。
+@wandbox {expr} で {expr} の結果を返します。
 {expr} には結果が標準出力可能な式、もしくはラムダ式が設定できます
 ラムダ式の場合はラムダ式が評価された結果が出力されます
 EOS
 	elsif /^@wandbox[\s　]*(.+)/i =~ text
 		code = $1
 		p "code: #{code}"
-		result = Wandbox.compile(code).gsub("  ", "　").slice(0, 1000)
-		({text: result}).to_json
+		Wandbox.compile(code).gsub("  ", "　").slice(0, 1000)
+
 	end
+	{text: result}
 end
 
 
