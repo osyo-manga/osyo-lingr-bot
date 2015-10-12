@@ -518,7 +518,7 @@ post '/slacktest' do
 end
 
 post '/slack-wandbox' do
-	text = params.fetch("text").strip
+	text = CGI.unescapeHTML params.fetch("text").strip
 	p "text: #{text}"
 	result = if /^@wandbox[\s　]*help/i =~ text
 		<<EOS
