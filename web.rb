@@ -526,7 +526,7 @@ post '/slack-wandbox' do
 {expr} には結果が標準出力可能な式、もしくはラムダ式が設定できます
 ラムダ式の場合はラムダ式が評価された結果が出力されます
 EOS
-	elsif /^@wandbox[\s　]*(.+)/i =~ text
+	elsif /^@wandbox[\s　]*(.+)/im =~ text
 		code = $1
 		p "code: #{code}"
 		Wandbox.compile(code).slice(0, 1000)
