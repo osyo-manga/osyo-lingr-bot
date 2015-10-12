@@ -511,7 +511,7 @@ end
 
 post '/slacktest' do
 	text = params.fetch("text").strip
-	"result: #{text}"
+	{text: "result: #{text}"}.to_json
 # 	case text
 # 	when "when"
 # 	end
