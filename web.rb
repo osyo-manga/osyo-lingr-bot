@@ -529,7 +529,7 @@ EOS
 	elsif /^@wandbox[\s　]*(.+)/i =~ text
 		code = $1
 		p "code: #{code}"
-		Wandbox.compile(code).gsub("  ", "　").slice(0, 1000)
+		Wandbox.compile(code).slice(0, 1000)
 
 	end
 	{text: "result:\n#{result}"}.to_json
