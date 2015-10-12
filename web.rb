@@ -517,7 +517,7 @@ post '/slacktest' do
 # 	end
 end
 
-post '/wandbox' do
+post '/slack-wandbox' do
 	text = params.fetch("text").strip
 	p "text: #{text}"
 	if /^@wandbox[\s　]*help/i =~ text
