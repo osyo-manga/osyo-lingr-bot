@@ -507,7 +507,7 @@ end
 
 get '/slacktest' do
 	"hello slack bot."
-ene
+end
 
 post '/slacktest' do
 	text = params.fetch("text").strip
@@ -516,7 +516,6 @@ post '/slacktest' do
 	when "when"
 		({text: "homu"}).to_json
 	end
-ene
-
+end
 
 
