@@ -505,12 +505,16 @@ end
 
 ## Slack
 
+get '/slacktest' do
+	"hello slack bot."
+ene
+
 post '/slacktest' do
 	text = params.fetch("text").strip
 
 	case text
 	when "when"
-		"aaaaa"
+		({text: "homu"}).to_json
 	end
 ene
 
