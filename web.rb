@@ -503,5 +503,16 @@ EOS
 	return ""
 end
 
+## Slack
+
+post '/slacktest' do
+	text = params.fetch("text").strip
+
+	case text
+	when "when"
+		"aaaaa"
+	end
+end
+
 
 
