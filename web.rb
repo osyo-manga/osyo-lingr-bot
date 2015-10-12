@@ -520,15 +520,15 @@ end
 post '/wandbox' do
 	text = params.fetch("text").strip
 	if /^!wandbox[\s　]*help/i =~ text
-		return "!wandbox-cpp {expr} で {expr} の結果を返します。\n{expr} には結果が標準出力可能な式、もしくはラムダ式が設定できます\nラムダ式の場合はラムダ式が評価された結果が出力されます"
+		<<EOS
+!wandbox {expr} で {expr} の結果を返します。
+{expr} には結果が標準出力可能な式、もしくはラムダ式が設定できます
+ラムダ式の場合はラムダ式が評価された結果が出力されます
+EOS
 	elsif /^!wandbox[\s　]*(.+)/i =~ text
 		code = $1
 		result = Wandbox.compile(code).gsub("  ", "　").slice(0, 1000)
 		({text: result}).to_json
-# 	elsif /^!wandbox-(\S+)[\s　]*(.+)/i =~ text
-# 		post_lingr_wandbox_run(room, $1, $2)
-# 	elsif text =~ /^!wandbox[\s　]+http:\/\/melpon.org\/wandbox\/permlink\/(\w+)$/
-# 		post_lingr_wandbox_code(room, $1)
 	end
 end
 
