@@ -519,6 +519,7 @@ end
 
 post '/wandbox' do
 	text = params.fetch("text").strip
+	p "text: #{text}"
 	if /^!wandbox[\s　]*help/i =~ text
 		<<EOS
 !wandbox {expr} で {expr} の結果を返します。
@@ -527,6 +528,7 @@ post '/wandbox' do
 EOS
 	elsif /^!wandbox[\s　]*(.+)/i =~ text
 		code = $1
+		p "code: #{code}"
 		result = Wandbox.compile(code).gsub("  ", "　").slice(0, 1000)
 		({text: result}).to_json
 	end
