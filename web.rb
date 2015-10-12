@@ -511,11 +511,11 @@ end
 
 post '/slacktest' do
 	text = params.fetch("text").strip
+	({text: text}).to_json
 
-	case text
-	when "when"
-		({text: "homu"}).to_json
-	end
+# 	case text
+# 	when "when"
+# 	end
 end
 
 
