@@ -532,7 +532,7 @@ EOS
 		Wandbox.compile(code).gsub("  ", "　").slice(0, 1000)
 
 	end
-	{text: result}.to_json
+	{text: "result:\n#{result}"}.to_json
 end
 
 
