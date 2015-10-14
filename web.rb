@@ -386,10 +386,9 @@ def post_lingr_wandbox_run(room, lang, code)
 	end
 end
 
-def post_lingr_wandbox_code(room, permlink)
-	Thread.start do
-		result = Wandbox.get_from_permlink(permlink)
-		result = <<"EOS"
+def wandbox_code permlink
+	result = Wandbox.get_from_permlink(permlink)
+	result = <<"EOS"
 [code]
 #{result.fetch("parameter", {})["code"].chomp}
 [compiler message]
@@ -397,6 +396,11 @@ def post_lingr_wandbox_code(room, permlink)
 [output]
 #{result.fetch("result", {})["program_message"]}
 EOS
+end
+
+def post_lingr_wandbox_code(room, permlink)
+	Thread.start do
+		result = wandbox_code permlink
 		result = result.chomp.gsub(/^$/, "　").gsub("	", "　　").gsub("  ", "　").slice(0, 1000)
 		post_to_lingr(room, "wandbox", result, ENV['WANDBOX_BOT_KEY'])
 	end
@@ -520,17 +524,18 @@ end
 post '/slack-wandbox' do
 	text = CGI.unescapeHTML params.fetch("text").strip
 	p "text: #{text}"
-	result = if /^@wandbox[\s　]*help/i =~ text
+	result = text =~ if /^@wandbox[\s　]*help/i
 		<<EOS
 @wandbox {expr} で {expr} の結果を返します。
 {expr} には結果が標準出力可能な式、もしくはラムダ式が設定できます
 ラムダ式の場合はラムダ式が評価された結果が出力されます
 EOS
-	elsif /^@wandbox[\s　]*(.+)/im =~ text
-		code = $1
-		p "code: #{code}"
-		Wandbox.compile(code).slice(0, 1000)
-
+	elsif text =~ /^@wandbox[\s　]*(.+)/im
+		p "code: #{1}"
+		Wandbox.compile(1).slice(0, 1000)
+	elsif text =~ /^@wandbox[\s　]+http:\/\/melpon.org\/wandbox\/permlink\/(\w+)$/
+		p "url #{$1}"
+		wandbox_code($1)
 	end
 	{text: "result:\n#{result}"}.to_json
 end
