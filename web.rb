@@ -530,7 +530,7 @@ post '/slack-wandbox' do
 {expr} には結果が標準出力可能な式、もしくはラムダ式が設定できます
 ラムダ式の場合はラムダ式が評価された結果が出力されます
 EOS
-	elsif /^@wandbox[\s　]+http:\/\/melpon.org\/wandbox\/permlink\/(\w+)$/ =~ text
+	elsif /^@wandbox[\s　]+<http:\/\/melpon.org\/wandbox\/permlink\/(\w+)>$/ =~ text
 		p "url #{$1}"
 		wandbox_code($1)
 	elsif /^@wandbox[\s　]*(.+)/im =~ text
