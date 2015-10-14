@@ -535,7 +535,7 @@ EOS
 		wandbox_code($1)
 	elsif /^@wandbox[\s　]*(.+)/im =~ text
 		p "code: #{$1}"
-		Wandbox.compile(1).slice(0, 1000)
+		Wandbox.compile($1).slice(0, 1000)
 	end
 	{text: "result:\n#{result}"}.to_json
 end
