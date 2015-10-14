@@ -524,16 +524,16 @@ end
 post '/slack-wandbox' do
 	text = CGI.unescapeHTML params.fetch("text").strip
 	p "text: #{text}"
-	result = text =~ if /^@wandbox[\s　]*help/i
+	result = if /^@wandbox[\s　]*help/i =~ text
 		<<EOS
 @wandbox {expr} で {expr} の結果を返します。
 {expr} には結果が標準出力可能な式、もしくはラムダ式が設定できます
 ラムダ式の場合はラムダ式が評価された結果が出力されます
 EOS
-	elsif text =~ /^@wandbox[\s　]*(.+)/im
+	elsif /^@wandbox[\s　]*(.+)/im ~= text
 		p "code: #{1}"
 		Wandbox.compile(1).slice(0, 1000)
-	elsif text =~ /^@wandbox[\s　]+http:\/\/melpon.org\/wandbox\/permlink\/(\w+)$/
+	elsif /^@wandbox[\s　]+http:\/\/melpon.org\/wandbox\/permlink\/(\w+)$/ =~ text
 		p "url #{$1}"
 		wandbox_code($1)
 	end
