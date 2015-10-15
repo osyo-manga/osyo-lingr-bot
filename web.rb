@@ -537,7 +537,11 @@ EOS
 		p "code: #{$1}"
 		Wandbox.compile($1).slice(0, 1000)
 	end
-	{text: "result:\n#{result}"}.to_json
+	{
+		username:   "wandbox-bot",
+		icon_emoji: ":dog:",
+		text: "result:\n#{result}"
+	}.to_json
 end
 
 
