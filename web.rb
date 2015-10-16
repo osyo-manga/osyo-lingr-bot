@@ -533,7 +533,9 @@ def wandbox_code_for_slack permlink
 [compiler message]
 #{result.fetch("result", {})["compiler_message"]}
 [output]
+```
 #{result.fetch("result", {})["program_message"]}
+```
 EOS
 end
 
