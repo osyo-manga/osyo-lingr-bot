@@ -521,6 +521,23 @@ post '/slacktest' do
 # 	end
 end
 
+
+
+def wandbox_code_for_slack permlink
+	result = Wandbox.get_from_permlink(permlink)
+	result = <<"EOS"
+[code]
+```
+#{result.fetch("parameter", {})["code"].chomp}
+```
+[compiler message]
+#{result.fetch("result", {})["compiler_message"]}
+[output]
+#{result.fetch("result", {})["program_message"]}
+EOS
+end
+
+
 post '/slack-wandbox' do
 	text = CGI.unescapeHTML params.fetch("text").strip
 	p "text: #{text}"
@@ -532,7 +549,7 @@ post '/slack-wandbox' do
 EOS
 	elsif /^@wandbox[\s　]+<http:\/\/melpon.org\/wandbox\/permlink\/(\w+)>$/ =~ text
 		p "url #{$1}"
-		wandbox_code($1)
+		wandbox_code_for_slack($1)
 	elsif /^@wandbox[\s　]*(.+)/im =~ text
 		p "code: #{$1}"
 		Wandbox.compile($1).slice(0, 1000)
