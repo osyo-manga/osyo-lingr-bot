@@ -556,7 +556,7 @@ EOS
 		wandbox_code_for_slack($1)
 	elsif /^@wandbox[\s　]*(.+)/im =~ text
 		p "code: #{$1}"
-		Wandbox.compile($1).slice(0, 1000)
+		"```#{{Wandbox.compile($1).slice(0, 1000)}```"
 	end
 	{
 		username:   "wandbox-bot",
