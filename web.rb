@@ -566,4 +566,35 @@ EOS
 end
 
 
+@agent = Mechanize.new
+@agent.verify_mode = OpenSSL::SSL::VERIFY_NONE
+@agent.user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.0 Safari/537.36'
+@agent.request_headers = {
+  'Accept-Encoding' => 'gzip,deflate,sdch',
+  'Accept-Language' => 'ja,en-US;q=0.8,en;q=0.6'
+}
+
+def url_title url
+  res = @agent.get url
+    if res.code == '200' && res['Content-Type'].include?('text/html')
+      title = res.at('title').tap{|it|break it.inner_text if it} ||
+        res.at('meta[property="og:title"]').tap{|it|it.attr('content') if it} ||
+        res.at('meta[property="twitter:title"]').tap{|it|it.attr('content') if it}
+      return title if title
+	end
+end
+
+
+post '/slack/url' do
+	text = CGI.unescapeHTML params.fetch("text").strip
+	p "/slack/url:#{text}"
+	{
+		username:   "url-bot",
+# 		icon_emoji: ":dog:",
+		text: "result:\n#{url_title text}"
+	}.to_json
+end
+
+
+
 
